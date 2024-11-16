@@ -1,3 +1,15 @@
+DROP TABLE Valider;
+DROP TABLE Cacher;
+DROP TABLE Sanctionner;
+DROP TABLE Contenir;
+DROP TABLE Signaler;
+DROP TABLE Voter;
+DROP TABLE Argument;
+DROP TABLE Camp;
+DROP TABLE Debat;
+DROP TABLE Categorie;
+DROP TABLE Utilisateur;
+
 CREATE TABLE Utilisateur(
    id_utilisateur SERIAL,
    email VARCHAR(50),
@@ -39,7 +51,7 @@ CREATE TABLE Argument(
    date_arg DATE,
    texte VARCHAR(50),
    id_camp INT NOT NULL,
-   id_arg_principal VARCHAR(50),
+   id_arg_principal INT,
    id_utilisateur INT NOT NULL,
    PRIMARY KEY(id_arg),
    FOREIGN KEY(id_camp) REFERENCES Camp(id_camp),
