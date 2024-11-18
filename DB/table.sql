@@ -9,13 +9,16 @@ DROP TABLE Camp;
 DROP TABLE Debat;
 DROP TABLE Categorie;
 DROP TABLE Utilisateur;
+DROP TYPE roleUtilisateur;
+
+CREATE TYPE roleUtilisateur AS ENUM('Utilisateur', 'Moderateur', 'Administrateur');
 
 CREATE TABLE Utilisateur(
    id_utilisateur SERIAL,
    email VARCHAR(50),
    pseudo VARCHAR(50),
    mdp VARCHAR(50),
-   role INT CHECK (role IN (1,2,3)),
+   role roleUtilisateur DEFAULT 'Utilisateur',
    date_creation DATE,
    PRIMARY KEY(id_utilisateur)
 );
@@ -31,7 +34,7 @@ CREATE TABLE Debat(
    est_valide BOOLEAN,
    nom_d VARCHAR(50),
    desc_d VARCHAR(50),
-   duree VARCHAR(50),
+   duree INTERVAL,
    date_creation DATE,
    id_utilisateur INT NOT NULL,
    PRIMARY KEY(id_debat),
