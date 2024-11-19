@@ -42,12 +42,14 @@ INSERT INTO Signaler (id_utilisateur, id_arg, date_signalement) VALUES
 (5, 3, '2024-11-20');
 
 -- Contenir
-INSERT INTO Contenir (nom_c, id_debat) VALUES
-('Jeux vidéos', 1),
-('Geek', 1),
-('Geek', 2);
+INSERT INTO Contenir (id_c, id_debat) VALUES
+(1, 1),
+(2, 1),
+(2, 2);
 
--- Sanctionner TODO
+-- Sanctionner
+INSERT INTO Sanctionner (id_utilisateur, id_arg, id_moderateur, date_sanction, raison, type_sanction) VALUES
+(3, 3, 2, '2024-11-20', '', 'Avertissement');
 
 --Cacher
 INSERT INTO Cacher (id_arg, date_cache, id_utilisateur) VALUES
