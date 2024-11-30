@@ -35,7 +35,7 @@ CREATE TABLE Categorie(
 
 CREATE TABLE Debat(
    id_debat SERIAL NOT NULL,
-   est_valide BOOLEAN NOT NULL,
+   est_valide BOOLEAN NOT NULL DEFAULT FALSE,
    nom_d VARCHAR(100) NOT NULL,
    desc_d VARCHAR(500) NOT NULL,
    duree INTERVAL NOT NULL,
