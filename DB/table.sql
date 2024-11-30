@@ -1,3 +1,4 @@
+DROP TABLE Statistiques;
 DROP TABLE Valider;
 DROP TABLE Cacher;
 DROP TABLE Sanctionner;
@@ -120,4 +121,19 @@ CREATE TABLE Valider(
    PRIMARY KEY(id_arg),
    FOREIGN KEY(id_arg) REFERENCES Argument(id_arg),
    FOREIGN KEY(id_utilisateur) REFERENCES Utilisateur(id_utilisateur)
+);
+
+CREATE TABLE Statistiques(
+    id_debat INT,
+    id_camp_gagnant INT,
+    nb_participant INT,
+    nb_vote_camp_1 INT,
+    nb_vote_camp_2 INT,
+    nb_vote_moyen REAL,
+    nb_arg_camp_1 INT,
+    nb_arg_camp_2 INT,
+    nb_arg_moyen REAL,
+    PRIMARY KEY(id_debat),
+    FOREIGN KEY(id_debat) REFERENCES Debat(id_debat),
+    FOREIGN KEY(id_camp_gagnant) REFERENCES Camp(id_camp)
 );
