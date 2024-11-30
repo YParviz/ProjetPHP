@@ -79,7 +79,7 @@ CREATE TABLE Signaler(
    id_utilisateur INT NOT NULL,
    id_arg INT NOT NULL,
    date_signalement DATE NOT NULL DEFAULT CURRENT_DATE,
-   est_valide BOOLEAN DEFAULT FALSE,
+   est_valide BOOLEAN NOT NULL DEFAULT FALSE,
    PRIMARY KEY(id_utilisateur, id_arg),
    FOREIGN KEY(id_utilisateur) REFERENCES Utilisateur(id_utilisateur),
    FOREIGN KEY(id_arg) REFERENCES Argument(id_arg)
