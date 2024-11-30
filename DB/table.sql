@@ -17,7 +17,7 @@ CREATE TYPE roleUtilisateur AS ENUM('Utilisateur', 'Moderateur', 'Administrateur
 CREATE TYPE typeSanction AS ENUM('Avertissement', 'Banissement');
 
 CREATE TABLE Utilisateur(
-   id_utilisateur SERIAL,
+   id_utilisateur SERIAL NOT NULL,
    email VARCHAR(320) NOT NULL,
    pseudo VARCHAR(20) NOT NULL,
    mdp VARCHAR(20) NOT NULL,
@@ -27,14 +27,14 @@ CREATE TABLE Utilisateur(
 );
 
 CREATE TABLE Categorie(
-   id_c SERIAL,
+   id_c SERIAL NOT NULL,
    nom_c VARCHAR(50) NOT NULL,
    desc_c VARCHAR(50) NOT NULL,
    PRIMARY KEY(id_c)
 );
 
 CREATE TABLE Debat(
-   id_debat SERIAL,
+   id_debat SERIAL NOT NULL,
    est_valide BOOLEAN NOT NULL,
    nom_d VARCHAR(50) NOT NULL,
    desc_d VARCHAR(500) NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE Debat(
 );
 
 CREATE TABLE Camp(
-   id_camp SERIAL,
+   id_camp SERIAL NOT NULL,
    nom_camp VARCHAR(50) NOT NULL,
    id_debat INT NOT NULL,
    PRIMARY KEY(id_camp),
@@ -54,7 +54,7 @@ CREATE TABLE Camp(
 );
 
 CREATE TABLE Argument(
-   id_arg SERIAL,
+   id_arg SERIAL NOT NULL,
    date_arg DATE NOT NULL DEFAULT CURRENT_DATE,
    texte VARCHAR(100) NOT NULL,
    id_camp INT NOT NULL,
@@ -67,8 +67,8 @@ CREATE TABLE Argument(
 );
 
 CREATE TABLE Voter(
-   id_utilisateur INT,
-   id_arg INT,
+   id_utilisateur INT NOT NULL,
+   id_arg INT NOT NULL,
    date_vote DATE NOT NULL DEFAULT CURRENT_DATE,
    PRIMARY KEY(id_utilisateur, id_arg),
    FOREIGN KEY(id_utilisateur) REFERENCES Utilisateur(id_utilisateur),
@@ -76,8 +76,8 @@ CREATE TABLE Voter(
 );
 
 CREATE TABLE Signaler(
-   id_utilisateur INT,
-   id_arg INT,
+   id_utilisateur INT NOT NULL,
+   id_arg INT NOT NULL,
    date_signalement DATE NOT NULL DEFAULT CURRENT_DATE,
    PRIMARY KEY(id_utilisateur, id_arg),
    FOREIGN KEY(id_utilisateur) REFERENCES Utilisateur(id_utilisateur),
@@ -85,17 +85,17 @@ CREATE TABLE Signaler(
 );
 
 CREATE TABLE Contenir(
-   id_c INT,
-   id_debat INT,
+   id_c INT NOT NULL,
+   id_debat INT NOT NULL,
    PRIMARY KEY(id_c, id_debat),
    FOREIGN KEY(id_c) REFERENCES Categorie(id_c),
    FOREIGN KEY(id_debat) REFERENCES Debat(id_debat)
 );
 
 CREATE TABLE Sanctionner(
-   id_utilisateur INT,
-   id_arg INT,
-   id_moderateur INT,
+   id_utilisateur INT NOT NULL,
+   id_arg INT NOT NULL,
+   id_moderateur INT NOT NULL,
    date_sanction DATE NOT NULL DEFAULT CURRENT_DATE,
    raison VARCHAR(500),
    type_sanction typeSanction NOT NULL DEFAULT 'Avertissement',
@@ -106,7 +106,7 @@ CREATE TABLE Sanctionner(
 );
 
 CREATE TABLE Cacher(
-   id_arg INT,
+   id_arg INT NOT NULL,
    date_cache DATE NOT NULL DEFAULT CURRENT_DATE,
    id_utilisateur INT NOT NULL,
    PRIMARY KEY(id_arg),
@@ -115,7 +115,7 @@ CREATE TABLE Cacher(
 );
 
 CREATE TABLE Valider(
-   id_arg INT,
+   id_arg INT NOT NULL,
    date_validation DATE NOT NULL DEFAULT CURRENT_DATE,
    id_utilisateur INT NOT NULL,
    PRIMARY KEY(id_arg),
@@ -124,15 +124,15 @@ CREATE TABLE Valider(
 );
 
 CREATE TABLE Statistiques(
-    id_debat INT,
-    id_camp_gagnant INT,
-    nb_participant INT,
-    nb_vote_camp_1 INT,
-    nb_vote_camp_2 INT,
-    nb_vote_moyen REAL,
-    nb_arg_camp_1 INT,
-    nb_arg_camp_2 INT,
-    nb_arg_moyen REAL,
+    id_debat INT NOT NULL,
+    id_camp_gagnant INT NOT NULL,
+    nb_participant INT NOT NULL,
+    nb_vote_camp_1 INT NOT NULL,
+    nb_vote_camp_2 INT NOT NULL,
+    nb_vote_moyen REAL NOT NULL,
+    nb_arg_camp_1 INT NOT NULL,
+    nb_arg_camp_2 INT NOT NULL,
+    nb_arg_moyen REAL NOT NULL,
     PRIMARY KEY(id_debat),
     FOREIGN KEY(id_debat) REFERENCES Debat(id_debat),
     FOREIGN KEY(id_camp_gagnant) REFERENCES Camp(id_camp)
