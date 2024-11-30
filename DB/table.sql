@@ -28,15 +28,15 @@ CREATE TABLE Utilisateur(
 
 CREATE TABLE Categorie(
    id_c SERIAL NOT NULL,
-   nom_c VARCHAR(50) NOT NULL,
-   desc_c VARCHAR(50) NOT NULL,
+   nom_c VARCHAR(100) NOT NULL,
+   desc_c VARCHAR(500) NOT NULL,
    PRIMARY KEY(id_c)
 );
 
 CREATE TABLE Debat(
    id_debat SERIAL NOT NULL,
    est_valide BOOLEAN NOT NULL,
-   nom_d VARCHAR(50) NOT NULL,
+   nom_d VARCHAR(100) NOT NULL,
    desc_d VARCHAR(500) NOT NULL,
    duree INTERVAL NOT NULL,
    date_creation DATE NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE Debat(
 
 CREATE TABLE Camp(
    id_camp SERIAL NOT NULL,
-   nom_camp VARCHAR(50) NOT NULL,
+   nom_camp VARCHAR(100) NOT NULL,
    id_debat INT NOT NULL,
    PRIMARY KEY(id_camp),
    FOREIGN KEY(id_debat) REFERENCES Debat(id_debat)
@@ -79,6 +79,7 @@ CREATE TABLE Signaler(
    id_utilisateur INT NOT NULL,
    id_arg INT NOT NULL,
    date_signalement DATE NOT NULL DEFAULT CURRENT_DATE,
+   est_valide BOOLEAN DEFAULT FALSE,
    PRIMARY KEY(id_utilisateur, id_arg),
    FOREIGN KEY(id_utilisateur) REFERENCES Utilisateur(id_utilisateur),
    FOREIGN KEY(id_arg) REFERENCES Argument(id_arg)

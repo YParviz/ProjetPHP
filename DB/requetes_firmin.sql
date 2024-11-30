@@ -33,7 +33,7 @@ SELECT Argument.id_arg, texte, nom_camp, COUNT(*)
 FROM Debat NATURAL JOIN Camp
   JOIN Argument ON Argument.id_camp = Camp.id_camp
   JOIN Voter ON Voter.id_arg = Argument.id_arg
-WHERE Debat.id_debat = 1
+WHERE Debat.id_debat = {$VAR}
 GROUP BY Argument.id_arg, Camp.id_camp
 ORDER BY COUNT(Voter.id_arg) DESC
 LIMIT 3;
