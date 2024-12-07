@@ -55,7 +55,7 @@ CREATE TABLE Camp(
 
 CREATE TABLE Argument(
    id_arg SERIAL NOT NULL,
-   date_arg DATE NOT NULL DEFAULT CURRENT_DATE,
+   date_poste DATE NOT NULL DEFAULT CURRENT_DATE,
    texte VARCHAR(100) NOT NULL,
    id_camp INT NOT NULL,
    id_arg_principal INT,
