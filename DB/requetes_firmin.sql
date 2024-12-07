@@ -10,16 +10,50 @@ SELECT id_debat, nom_d
 FROM Debat
 WHERE Debat.nom_d LIKE '%{$VAR}%';
 
--- Mise à jour des stats
--- TODO : Faire le calcul des stats puis faire l'insert
+-- Calcul des stats (Requêtes pour avoir les nombres nécessaire au calcul)
+-- Calcul du nombre de participants
+SELECT COUNT(DISTINCT Argument.id_utilisateur)
+FROM Debat NATURAL JOIN Camp
+  JOIN Argument ON Argument.id_camp = Camp.id_camp
+WHERE Debat.id_debat = {$VAR};
+
+-- Calcul de nombre de vote par camp (camp gagnant = première entrée)
+SELECT Camp.id_camp, Camp.nom_c, COUNT(*)
+FROM Debat NATURAL JOIN Camp
+  JOIN Argument ON Argument.id_camp = Camp.id_camp
+  JOIN Voter ON Voter.id_arg = Argument.id_arg
+WHERE Debat.id_debat = {$VAR}
+GROUP BY Camp.id_camp
+ORDER BY COUNT(Voter.id_arg);
+
+-- Calcul du nombre de votant
+SELECT COUNT(DISTINCT Voter.id_utilisateur)
+FROM Debat NATURAL JOIN Camp
+  JOIN Argument ON Argument.id_camp = Camp.id_camp
+  JOIN Voter ON Voter.id_arg = Argument.id_arg
+WHERE Debat.id_debat = {$VAR};
+
+-- Calcul du nombre d'argument par camp
+SELECT Camp.id_camp, Camp.nom_c, COUNT(*)
+FROM Debat NATURAL JOIN Camp
+  JOIN Argument ON Argument.id_camp = Camp.id_camp
+WHERE Debat.id_debat = {$VAR}
+GROUP BY Camp.id_camp
+ORDER BY COUNT(Argument.id_arg);
+
+-- Calcul du nombre d'utilisateur ayant posté un argument
+SELECT COUNT(DISTINCT Argument.id_utilisateur)
+FROM Debat NATURAL JOIN Camp
+  JOIN Argument ON Argument.id_camp = Camp.id_camp
+WHERE Debat.id_debat = {$VAR};
 
 
 -- Arguments cachés d'un débat
 SELECT Argument.id_arg, Argument.texte, Camp.nom_camp
 FROM Debat NATURAL JOIN Camp
-          JOIN Argument ON Argument.id_camp = CAmp.id_camp
-          JOIN Sanctionner ON Sanctionner.id_arg = Argument.id_arg
-WHERE Debat.id_debat = {$VAR}.
+  JOIN Argument ON Argument.id_camp = CAmp.id_camp
+  JOIN Sanctionner ON Sanctionner.id_arg = Argument.id_arg
+WHERE Debat.id_debat = {$VAR};
 
 -- Arguments d'un débat trié
 SELECT Argument.id_arg, Argument.texte, Camp.nom_camp
@@ -40,14 +74,6 @@ LIMIT 3;
 
 
 -- Statistiques
--- Nombre de débat participés avec des arguments
-SELECT COUNT(Debat.id_debat)
-FROM Debat NATURAL JOIN Camp
-  JOIN Argument ON Argument.id_camp = Camp.id_camp
-  JOIN Utilisateur ON Utilisateur.id_utilisateur = Argument.id_utilisateur
-WHERE Utilisateur.id_utilisateur = {$VAR}
-GROUP BY Utilisateur.id_utilisateur;
-
 -- Nombre de vote par camp du débat
 SELECT Camp.nom_camp, COUNT(*)
 FROM Debat NATURAL JOIN Camp
