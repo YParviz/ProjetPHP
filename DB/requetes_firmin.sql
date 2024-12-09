@@ -18,7 +18,7 @@ FROM Debat NATURAL JOIN Camp
 WHERE Debat.id_debat = {$VAR};
 
 -- Calcul de nombre de vote par camp (camp gagnant = première entrée)
-SELECT Camp.id_camp, Camp.nom_c, COUNT(*)
+SELECT Camp.id_camp, Camp.nom_camp, COUNT(*)
 FROM Debat NATURAL JOIN Camp
   JOIN Argument ON Argument.id_camp = Camp.id_camp
   JOIN Voter ON Voter.id_arg = Argument.id_arg
@@ -34,7 +34,7 @@ FROM Debat NATURAL JOIN Camp
 WHERE Debat.id_debat = {$VAR};
 
 -- Calcul du nombre d'argument par camp
-SELECT Camp.id_camp, Camp.nom_c, COUNT(*)
+SELECT Camp.id_camp, Camp.nom_camp, COUNT(*)
 FROM Debat NATURAL JOIN Camp
   JOIN Argument ON Argument.id_camp = Camp.id_camp
 WHERE Debat.id_debat = {$VAR}
@@ -83,18 +83,18 @@ FROM Debat NATURAL JOIN Camp
 GROUP BY Camp.id_camp;
 
 -- Argument le plus voté pour un débat
-SELECT Argument.id_arg, Argument.texte
+SELECT Argument.id_arg, Argument.texte, COUNT(*)
 FROM Debat NATURAL JOIN Camp
   JOIN Argument ON Argument.id_camp = Camp.id_camp
   JOIN Voter ON Voter.id_arg = Argument.id_arg
-WHERE Debat.id_debat = 1
+WHERE Debat.id_debat = {$VAR}
 GROUP BY Argument.id_arg
 HAVING COUNT(*) >= ALL (
   SELECT COUNT(*)
   FROM Debat NATURAL JOIN Camp
     JOIN Argument ON Argument.id_camp = Camp.id_camp
     JOIN Voter ON Voter.id_arg = Argument.id_arg
-  WHERE Debat.id_debat = 1
+  WHERE Debat.id_debat = {$VAR}
   GROUP BY Argument.id_arg
 );
 

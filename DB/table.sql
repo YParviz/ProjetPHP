@@ -106,15 +106,6 @@ CREATE TABLE Sanctionner(
    FOREIGN KEY(id_moderateur) REFERENCES Utilisateur(id_utilisateur)
 );
 
-CREATE TABLE Cacher(
-   id_arg INT NOT NULL,
-   date_cache DATE NOT NULL DEFAULT CURRENT_DATE,
-   id_utilisateur INT NOT NULL,
-   PRIMARY KEY(id_arg),
-   FOREIGN KEY(id_arg) REFERENCES Argument(id_arg),
-   FOREIGN KEY(id_utilisateur) REFERENCES Utilisateur(id_utilisateur)
-);
-
 CREATE TABLE Valider(
    id_arg INT NOT NULL,
    date_validation DATE NOT NULL DEFAULT CURRENT_DATE,
