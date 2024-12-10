@@ -18,8 +18,8 @@ CREATE TYPE typeSanction AS ENUM('Avertissement', 'Banissement');
 
 CREATE TABLE Utilisateur(
    id_utilisateur SERIAL NOT NULL,
-   email VARCHAR(320) NOT NULL,
-   pseudo VARCHAR(20) NOT NULL,
+   email VARCHAR(320) NOT NULL UNIQUE,
+   pseudo VARCHAR(20) NOT NULL UNIQUE,
    mdp VARCHAR(20) NOT NULL,
    role roleUtilisateur NOT NULL DEFAULT 'Utilisateur',
    date_creation DATE NOT NULL DEFAULT CURRENT_DATE,
@@ -28,7 +28,7 @@ CREATE TABLE Utilisateur(
 
 CREATE TABLE Categorie(
    id_c SERIAL NOT NULL,
-   nom_c VARCHAR(100) NOT NULL,
+   nom_c VARCHAR(100) NOT NULL UNIQUE,
    desc_c VARCHAR(500) NOT NULL,
    PRIMARY KEY(id_c)
 );
