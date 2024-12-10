@@ -17,16 +17,16 @@ INSERT INTO Categorie (nom_c, desc_c) VALUES
 ('Environnement', 'Questions ecologiques et changement climatique'),
 ('Technologie', 'Innovations et avancees technologiques'),
 ('Societe', 'Enjeux societaux et sociaux contemporains'),
-('economie', 'Debats economiques et modèles economiques'),
-('education', 'Systèmes educatifs et pedagogie'),
+('Economie', 'Debats economiques et modèles economiques'),
+('Education', 'Systèmes educatifs et pedagogie'),
 ('Sante', 'Questions de sante publique et systèmes de soins');
 
 -- Insertion de debats
 INSERT INTO Debat (est_valide, nom_d, desc_d, duree, date_creation, id_utilisateur) VALUES
 (true, 'Intelligence Artificielle', 'Faut-il reguler le developpement de l''IA ?', '3 days', '2024-04-01', 1),
 (true, 'Changement Climatique', 'Quelles actions concrètes pour lutter contre le rechauffement ?', '5 days', '2024-04-10', 2),
-(true, 'education Numerique', 'La transformation digitale de l''enseignement', '4 days', '2024-04-15', 6),
-(false, 'economie Collaborative', 'Opportunites et defis des nouvelles formes d''economie', '3 days', '2024-04-20', 7);
+(true, 'Education Numerique', 'La transformation digitale de l''enseignement', '4 days', '2024-04-15', 6),
+(false, 'Economie Collaborative', 'Opportunites et defis des nouvelles formes d''economie', '3 days', '2024-04-20', 7);
 
 -- Lien entre categories et debats
 INSERT INTO Contenir (id_c, id_debat) VALUES
