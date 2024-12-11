@@ -3,7 +3,7 @@
 SELECT Debat.id_debat, Debat.nom_d
 FROM Debat LEFT OUTER JOIN Statistiques ON Debat.id_debat = Statistiques.id_debat
 WHERE Debat.est_valide
-  AND Statistiques.id_debat = NULL;
+  AND Statistiques.id_debat IS NULL;
 
 -- Débat par nom
 SELECT id_debat, nom_d
