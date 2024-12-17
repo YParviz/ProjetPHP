@@ -3,6 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Elément de connexion pour la base de donnée pour le projet à mettre dans le .env
 $host = "postgresql1.ensinfo.sciences.univ-nantes.prive";
 $dbname = "l3_alt_02";
 $user = "l3_alt_02";
@@ -11,12 +12,14 @@ $password = "l3_alt_02";
 $message = ""; // Variable pour stocker le message à afficher
 
 try {
+    // Réalise la connection à la base via les variables.
     $pdo = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $email = "";
     $mdp = "";
 
+    // Récupère les requettes POST venant du frontend
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Récupérer les données du formulaire
         $email = $_POST['email'] ?? '';
@@ -30,6 +33,7 @@ try {
 
     echo "email:$email, mdp:$mdp";
 
+    // Récupère le retour de la base sur la réussite ou non de l'oppération
     if ($stmt->rowCount() > 0) {
         $message = "Connexion réussie ! Bienvenue, $email.";
     } else {
