@@ -22,11 +22,11 @@ INSERT INTO Categorie (nom_c, desc_c) VALUES
 ('Sante', 'Questions de sante publique et systèmes de soins');
 
 -- Insertion de debats
-INSERT INTO Debat (est_valide, nom_d, desc_d, duree, date_creation, id_utilisateur) VALUES
-(true, 'Intelligence Artificielle', 'Faut-il reguler le developpement de l''IA ?', '3 days', '2024-04-01', 1),
-(true, 'Changement Climatique', 'Quelles actions concrètes pour lutter contre le rechauffement ?', '5 days', '2024-04-10', 2),
-(true, 'Education Numerique', 'La transformation digitale de l''enseignement', '4 days', '2024-04-15', 6),
-(false, 'Economie Collaborative', 'Opportunites et defis des nouvelles formes d''economie', '3 days', '2024-04-20', 7);
+INSERT INTO Debat (nom_d, desc_d, statut, duree, date_creation, id_utilisateur) VALUES
+('Intelligence Artificielle', 'Faut-il reguler le developpement de l''IA ?', 'Valide', 72, '2024-04-01', 1),
+('Changement Climatique', 'Quelles actions concrètes pour lutter contre le rechauffement ?', 'Valide', 120, '2024-04-10', 2),
+('Education Numerique', 'La transformation digitale de l''enseignement', 'Valide', 96, '2024-04-15', 6),
+('Economie Collaborative', 'Opportunites et defis des nouvelles formes d''economie', 'Attente', 72, '2024-04-20', 7);
 
 -- Lien entre categories et debats
 INSERT INTO Contenir (id_c, id_debat) VALUES

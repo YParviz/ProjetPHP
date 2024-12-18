@@ -12,9 +12,11 @@ DROP TABLE Categorie;
 DROP TABLE Utilisateur;
 DROP TYPE roleUtilisateur;
 DROP TYPE typeSanction;
+DROP TYPE statutDebat;
 
 CREATE TYPE roleUtilisateur AS ENUM('Utilisateur', 'Moderateur', 'Administrateur');
 CREATE TYPE typeSanction AS ENUM('Avertissement', 'Banissement');
+CREATE TYPE statutDebat AS ENUM('Attente', 'Valide', 'Ferme');
 
 CREATE TABLE Utilisateur(
    id_utilisateur SERIAL NOT NULL,
@@ -35,10 +37,10 @@ CREATE TABLE Categorie(
 
 CREATE TABLE Debat(
    id_debat SERIAL NOT NULL,
-   est_valide BOOLEAN NOT NULL DEFAULT FALSE,
    nom_d VARCHAR(100) NOT NULL,
    desc_d VARCHAR(500) NOT NULL,
-   duree INTERVAL NOT NULL,
+   statut statutDebat NOT NULL DEFAULT 'Attente',
+   duree INT NOT NULL DEFAULT 24, -- Durée en heure
    date_creation DATE NOT NULL,
    id_utilisateur INT NOT NULL,
    PRIMARY KEY(id_debat),
