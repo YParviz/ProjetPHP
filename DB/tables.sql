@@ -1,6 +1,5 @@
 DROP TABLE Statistiques;
 DROP TABLE Valider;
-DROP TABLE Cacher;
 DROP TABLE Sanctionner;
 DROP TABLE Contenir;
 DROP TABLE Signaler;
