@@ -19,6 +19,7 @@ try {
 
     $valeurs = array();
     $erreurs = "";
+    $modeCreation = false;
     $erreur = false;
 
     if($_SERVER['REQUEST_METHOD'] === 'POST'){ //Les champs pour la création sont remplis
@@ -30,27 +31,27 @@ try {
         foreach($categories as $categorie){
             $nomCat = $categorie['nom_c'];
             if(isset($_POST[$nomCat])) {
-                $valeurs['cats'][] = $_POST[$nomCat];
+                $valeurs['cats'][$nomCat] = $_POST[$nomCat];
             }
-        }
-
-        if($valeurs['duree_jour'] == 0){
-            $erreurs = $erreurs."La durée minimum d'un débat est de 1 jour<br>";
         }
 
         if($valeurs['duree_jour'] == 7 && $valeurs['duree_heure'] > 0){
             $erreurs = $erreurs."La durée d'un débat ne doit pas dépasser 7 jours<br>";
+            $erreur = true;
         }
 
-        print_r($_POST);
+        if(!isset($valeurs['cats'])){
+            $erreurs = $erreurs."Le débat doit avoir au minimum une catégorie<br>";
+            $erreur = true;
+        }
 
-        //TODO : plein de test
-        $erreur = $erreur == "";
-        $modeCreation = true;
-    } else { //Les champs sont vides
-        
+        $modeCreation = !$erreur;
 
-        $modeCreation = false;
+    } else {
+        $valeurs['titre'] = "";
+        $valeurs['desc'] = "";
+        $valeurs['duree_jour'] = "";
+        $valeurs['duree_heure'] = "";
     }
 
 } catch (PDOException $e) {
@@ -66,18 +67,30 @@ try {
 </head>
 <body>
 <h1>Création d'un débat</h1>
-<?php if(!$modeCreation) {?>
+<?php if(!$modeCreation) {
+        if($erreur) {
+            echo "<p style='color: crimson'>$erreurs</p>";
+        }?>
 <form method="POST">
     <p>
-        Titre : <input type="text" name="titre" required><br>
+        Titre : <input type="text" name="titre" maxlength="100" required value="<?php $titre = $valeurs['titre']; echo "$titre"?>"><br>
         Description : <br>
-        <textarea name="description" rows="8" cols="30" required></textarea><br>
+        <textarea name="description" rows="8" cols="30" maxlength="500" required><?php $desc = $valeurs['desc']; echo "$desc"?></textarea><br>
         Durée du débat :  <input type="number" min="1" max="7" name="duree_jour" value=1> jours <input type="number" min="0" max="24" name="duree_heure" value=0> heures <br>
+
+        <h2>Camp</h2>
+        Camp 1 : <input type="text" maxlength="100" required> Camp 2 : <input type="text" maxlength="100" required>
+
         <h2>Catégorie</h2>
         <?php
             foreach ($categories as $categorie) {
                 $nom_cat = $categorie['nom_c'];
-                echo "$nom_cat : <input type='checkbox' name='$nom_cat' value='a'><br>";
+                $input = "$nom_cat : <input type='checkbox' name='$nom_cat'";
+                if(isset($valeurs['cats'][$nom_cat])) {
+                    $input = $input." checked";
+                }
+                $input = $input."><br>";
+                echo $input;
             }
         ?>
         <br>
