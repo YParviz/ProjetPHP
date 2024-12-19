@@ -1,12 +1,13 @@
 <?php
 $host = "localhost";
+$host_fac = "postgresql1.ensinfo.sciences.univ-nantes.prive";
 $dbname = "l3_alt_02";
 $user = "l3_alt_02";
 $password = "l3_alt_02";
 
 try {
     // Connexion à PostgreSQL
-    $pdo = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
+    $pdo = new PDO("pgsql:host=$host_fac;dbname=$dbname", $user, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $categories = array();
@@ -19,7 +20,7 @@ try {
 
     $valeurs = array();
     $erreurs = "";
-    $modeCreation = false;
+    $creation = false;
     $erreur = false;
 
     if($_SERVER['REQUEST_METHOD'] === 'POST'){ //Les champs pour la création sont remplis
@@ -27,6 +28,8 @@ try {
         $valeurs['desc'] = $_POST['description'];
         $valeurs['duree_jour'] = $_POST['duree_jour'];
         $valeurs['duree_heure'] = $_POST['duree_heure'];
+        $valeurs['camp1'] = $_POST['camp1'];
+        $valeurs['camp2'] = $_POST['camp2'];
         
         foreach($categories as $categorie){
             $nomCat = $categorie['nom_c'];
@@ -45,13 +48,67 @@ try {
             $erreur = true;
         }
 
-        $modeCreation = !$erreur;
+        if(!$erreur){
+            //Création du débat
+            $stmt = $pdo->prepare("INSERT INTO Debat (nom_d, desc_d, duree, id_utilisateur) VALUES (:nom_d, :desc_d, :duree, :id_utilisateur)");
+
+            $duree = $valeurs['duree_jour'] * 24 + $valeurs['duree_heure'];
+
+            $stmt->execute([
+                ':nom_d' => $valeurs['titre'],
+                ':desc_d' => $valeurs['desc'],
+                ':duree' => $duree,
+                ':id_utilisateur' => 1
+            ]);
+
+
+            if($stmt->rowCount() > 0) {
+
+                $stmt = $pdo->prepare("SELECT id_debat FROM Debat WHERE nom_d = :nom_d AND desc_d = :desc_d AND duree = :duree AND id_utilisateur = :utilisateur");
+                $stmt->execute([
+                    ':nom_d' => $valeurs['titre'],
+                    ':desc_d' => $valeurs['desc'],
+                    ':duree' => $duree,
+                    ':utilisateur' => 1
+                ]);
+
+                $debat = $stmt->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT, 0);
+
+                $stmt_camp = $pdo->prepare("INSERT INTO Camp (nom_camp, id_debat) VALUES (:camp1, :id_debat), (:camp2, :id_debat);");
+                $stmt_camp->execute([
+                    ':camp1' => $valeurs['camp1'],
+                    ':camp2' => $valeurs['camp2'],
+                    'id_debat' => $debat['id_debat']
+                ]);
+
+                if($stmt_camp->rowCount() > 0){
+
+                    //Pour chaque catégorie : trouver son numéro et insérer dans contenir
+                    
+                    if($stmt_cat->rowCount() > 1) {
+                        $creation = true;
+                    } else {
+                        $erreurs = "Une erreur s'est produite lors de la création des catégories";
+                        $erreur = true;
+                    }
+                } else {
+                    $erreurs = "Une erreur s'est produite lors de la création des camps";
+                    $erreur = true;
+                }
+                
+            } else {
+                $erreurs = "Une erreur s'est produite lors de la création du débat";
+                $erreur;
+            }
+        }
 
     } else {
         $valeurs['titre'] = "";
         $valeurs['desc'] = "";
         $valeurs['duree_jour'] = "";
         $valeurs['duree_heure'] = "";
+        $valeurs['camp1'] = "";
+        $valeurs['camp2'] = "";
     }
 
 } catch (PDOException $e) {
@@ -67,7 +124,7 @@ try {
 </head>
 <body>
 <h1>Création d'un débat</h1>
-<?php if(!$modeCreation) {
+<?php if(!$creation) {
         if($erreur) {
             echo "<p style='color: crimson'>$erreurs</p>";
         }?>
@@ -79,7 +136,8 @@ try {
         Durée du débat :  <input type="number" min="1" max="7" name="duree_jour" value=1> jours <input type="number" min="0" max="24" name="duree_heure" value=0> heures <br>
 
         <h2>Camp</h2>
-        Camp 1 : <input type="text" maxlength="100" required> Camp 2 : <input type="text" maxlength="100" required>
+        Camp 1 : <input type="text" name = "camp1" maxlength="100" required value="<?php $camp = $valeurs['camp1']; echo "$camp"?>">
+        Camp 2 : <input type="text" name = "camp2" maxlength="100" required value="<?php $camp = $valeurs['camp2']; echo "$camp"?>">
 
         <h2>Catégorie</h2>
         <?php
@@ -97,9 +155,7 @@ try {
         <input type="submit">
     </p>
     </form>
-<?php } else if($erreur) { 
-            echo $erreurs;
-    } else { ?>
+<?php } else { ?>
     <p>Le débat a été créé, il est en attente de validation par un modérateur.</p><br>
     <a href="creation_debat.php">Retour</a>
 <?php } ?>

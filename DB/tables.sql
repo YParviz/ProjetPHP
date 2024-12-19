@@ -40,7 +40,7 @@ CREATE TABLE Debat(
    desc_d VARCHAR(500) NOT NULL,
    statut statutDebat NOT NULL DEFAULT 'Attente',
    duree INT NOT NULL DEFAULT 24, -- Durée en heure
-   date_creation DATE NOT NULL,
+   date_creation DATE NOT NULL DEFAULT CURRENT_DATE,
    id_utilisateur INT NOT NULL,
    PRIMARY KEY(id_debat),
    FOREIGN KEY(id_utilisateur) REFERENCES Utilisateur(id_utilisateur)
