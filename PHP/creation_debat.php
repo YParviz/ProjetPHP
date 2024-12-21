@@ -117,7 +117,7 @@ try {
                 
             } else {
                 $erreurs = "Une erreur s'est produite lors de la création du débat";
-                $erreur;
+                $erreur = true;
             }
         }
 
