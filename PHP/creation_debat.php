@@ -7,7 +7,7 @@ $password = "l3_alt_02";
 
 try {
     // Connexion à PostgreSQL
-    $pdo = new PDO("pgsql:host=$host_fac;dbname=$dbname", $user, $password);
+    $pdo = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $categories = array();
@@ -30,11 +30,12 @@ try {
         $valeurs['duree_heure'] = $_POST['duree_heure'];
         $valeurs['camp1'] = $_POST['camp1'];
         $valeurs['camp2'] = $_POST['camp2'];
+        $valeurs['cats'] = array();
         
         foreach($categories as $categorie){
             $nomCat = $categorie['nom_c'];
             if(isset($_POST[$nomCat])) {
-                $valeurs['cats'][$nomCat] = $_POST[$nomCat];
+                $valeurs['cats'][] = $nomCat;
             }
         }
 
@@ -84,8 +85,26 @@ try {
                 if($stmt_camp->rowCount() > 0){
 
                     //Pour chaque catégorie : trouver son numéro et insérer dans contenir
+
+                    $cats = "(";
+                    foreach ($valeurs['cats'] as $cat) {
+                        $cats .= "'".$cat."', ";
+                    }
+                    $cats = substr($cats, 0, -2);
+                    $cats .= ")";
+
+                    $stmt_cat = $pdo->prepare("SELECT id_c FROM Categorie WHERE nom_c IN $cats");
+                    $stmt_cat->execute();
+
+                    foreach ($stmt_cat->fetchAll(PDO::FETCH_ASSOC) as $cat) {
+                        $stmt_contenir = $pdo->prepare("INSERT INTO Contenir (id_c, id_debat) VALUES (:id_c, :id_debat);");
+                        $stmt_contenir->execute([
+                                ':id_c' => $cat['id_c'],
+                                ':id_debat' => $debat['id_debat']
+                        ]);
+                    }
                     
-                    if($stmt_cat->rowCount() > 1) {
+                    if($stmt_cat->rowCount() > 0) {
                         $creation = true;
                     } else {
                         $erreurs = "Une erreur s'est produite lors de la création des catégories";
@@ -109,6 +128,7 @@ try {
         $valeurs['duree_heure'] = "";
         $valeurs['camp1'] = "";
         $valeurs['camp2'] = "";
+        $valeurs['cats'] = array();
     }
 
 } catch (PDOException $e) {
@@ -144,7 +164,7 @@ try {
             foreach ($categories as $categorie) {
                 $nom_cat = $categorie['nom_c'];
                 $input = "$nom_cat : <input type='checkbox' name='$nom_cat'";
-                if(isset($valeurs['cats'][$nom_cat])) {
+                if(in_array($nom_cat, $valeurs['cats'])) { //On coche les catégories qui étaient déjà cochés
                     $input = $input." checked";
                 }
                 $input = $input."><br>";
