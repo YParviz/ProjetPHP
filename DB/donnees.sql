@@ -95,7 +95,7 @@ INSERT INTO Argument (texte, id_camp, id_arg_principal, id_utilisateur, date_pos
 
 -- Votes
 INSERT INTO Voter (id_utilisateur, id_arg, date_vote) VALUES
--- Votes pour le debat Intelligence Artificielle (Arguments 1-9)
+-- Votes pour le debat Intelligence Artificielle
 (1, 1, '2024-04-05'),
 (2, 2, '2024-04-06'),
 (3, 3, '2024-04-07'),
@@ -105,18 +105,16 @@ INSERT INTO Voter (id_utilisateur, id_arg, date_vote) VALUES
 (7, 7, '2024-04-11'),
 (8, 8, '2024-04-12'),
 (9, 9, '2024-04-13'),
-
--- Votes supplementaires pour l'IA
 (2, 1, '2024-04-14'),
 (3, 4, '2024-04-15'),
 (4, 6, '2024-04-16'),
-(5, 8, '2024-04-17'),
+(5, 6, '2024-04-17'),
 (6, 2, '2024-04-18'),
 (7, 5, '2024-04-19'),
-(8, 7, '2024-04-20'),
+(8, 3, '2024-04-20'),
 (9, 3, '2024-04-21'),
 
--- Votes pour le debat Changement Climatique (Arguments 10-18)
+-- Votes pour le debat Changement Climatique
 (1, 10, '2024-04-22'),
 (2, 11, '2024-04-23'),
 (3, 12, '2024-04-24'),
@@ -126,9 +124,7 @@ INSERT INTO Voter (id_utilisateur, id_arg, date_vote) VALUES
 (7, 16, '2024-04-28'),
 (8, 17, '2024-04-29'),
 (9, 18, '2024-04-30'),
-
--- Votes supplementaires pour Changement Climatique
-(2, 10, '2024-05-01'),
+(3, 11, '2024-05-01'),
 (3, 13, '2024-05-02'),
 (4, 15, '2024-05-03'),
 (5, 17, '2024-05-04'),
@@ -137,19 +133,17 @@ INSERT INTO Voter (id_utilisateur, id_arg, date_vote) VALUES
 (8, 16, '2024-05-07'),
 (9, 12, '2024-05-08'),
 
--- Votes pour education Numerique (Arguments 19-27)
+-- Votes pour education Numerique
 (1, 19, '2024-05-09'),
 (2, 20, '2024-05-10'),
 (3, 21, '2024-05-11'),
 (4, 22, '2024-05-12'),
-(5, 23, '2024-05-13'),
+(5, 20, '2024-05-13'),
 (6, 24, '2024-05-14'),
 (7, 25, '2024-05-15'),
 (8, 26, '2024-05-16'),
 (9, 27, '2024-05-17'),
-
--- Votes supplementaires pour education Numerique
-(2, 19, '2024-05-18'),
+(9, 20, '2024-05-18'),
 (3, 22, '2024-05-19'),
 (4, 24, '2024-05-20'),
 (5, 26, '2024-05-21'),
@@ -158,7 +152,7 @@ INSERT INTO Voter (id_utilisateur, id_arg, date_vote) VALUES
 (8, 25, '2024-05-24'),
 (9, 21, '2024-05-25'),
 
--- Votes pour economie Collaborative (Arguments 28-36)
+-- Votes pour Economie Collaborative
 (1, 28, '2024-05-26'),
 (2, 29, '2024-05-27'),
 (3, 30, '2024-05-28'),
@@ -168,8 +162,6 @@ INSERT INTO Voter (id_utilisateur, id_arg, date_vote) VALUES
 (7, 34, '2024-06-01'),
 (8, 35, '2024-06-02'),
 (9, 36, '2024-06-03'),
-
--- Votes supplementaires pour economie Collaborative
 (2, 28, '2024-06-04'),
 (3, 31, '2024-06-05'),
 (4, 33, '2024-06-06'),
@@ -184,7 +176,6 @@ INSERT INTO Signaler (id_utilisateur, id_arg, date_signalement, est_valide) VALU
 (1, 3, '2024-04-07', false),
 (2, 5, '2024-04-15', true),
 (3, 8, '2024-04-25', false),
-(4, 15, '2024-04-26', false),
 (5, 22, '2024-04-29', true),
 (6, 31, '2024-05-02', false);
 

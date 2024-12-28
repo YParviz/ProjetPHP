@@ -96,7 +96,7 @@ CREATE TABLE Contenir(
 
 CREATE TABLE Sanctionner(
    id_arg INT NOT NULL,
-   id_moderateur INT NOT NULL,
+   id_utilisateur INT NOT NULL,
    date_sanction DATE NOT NULL DEFAULT CURRENT_DATE,
    raison VARCHAR(500),
    type_sanction typeSanction NOT NULL DEFAULT 'Avertissement',
