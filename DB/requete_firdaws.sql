@@ -40,6 +40,22 @@ inner join valider on argument.id_arg=valider.id_arg
 inner join voter on valider.id_arg=voter.id_arg
 where ?je bloque
 
+
+SELECT A1.id_arg
+FROM Argument A1 JOIN Voter Vo1 ON A1.id_arg = Vo1.id_arg
+                LEFT OUTER JOIN Valider Va ON A1.id_arg = Va.id_arg
+                LEFT OUTER JOIN Signaler S ON A1.id_arg = S.id_arg 
+WHERE Va.id_arg IS NULL -- N'est pas déjà validé
+AND (S.id_arg IS NULL OR NOT S.est_valide) -- N'a pas de signalement validé
+AND A1.id_arg_principal IS NOT NULL -- Est un sous-argument
+GROUP BY A1.id_arg
+HAVING COUNT(*) > (
+    SELECT COUNT(*)
+    FROM Argument A2 JOIN Voter Vo2 ON A2.id_arg = Vo2.id_arg
+    WHERE A2.id_arg = A1.id_arg_principal -- Lien avec le premier argument
+    GROUP BY A2.id_arg
+);
+
 --Administrateur
 
 --CRUD(Récupération, suppression, ajout, modif) sur la liste des modérateurs.
