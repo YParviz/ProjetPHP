@@ -114,7 +114,7 @@ CREATE TABLE Valider(
    FOREIGN KEY(id_utilisateur) REFERENCES Utilisateur(id_utilisateur)
 );
 
-CREATE TABLE Statistiques(
+CREATE TABLE Statistique(
     id_debat INT NOT NULL,
     id_camp_gagnant INT NOT NULL,
     nb_participant INT NOT NULL,
