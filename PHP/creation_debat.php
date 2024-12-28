@@ -59,7 +59,7 @@ try {
                 ':nom_d' => $valeurs['titre'],
                 ':desc_d' => $valeurs['desc'],
                 ':duree' => $duree,
-                ':id_utilisateur' => 1
+                ':id_utilisateur' => 1 //L'identifiant sera à changer en fonction de l'utilisateur connecté
             ]);
 
 
