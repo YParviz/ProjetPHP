@@ -189,10 +189,10 @@ INSERT INTO Signaler (id_utilisateur, id_arg, date_signalement, est_valide) VALU
 (6, 31, '2024-05-02', false);
 
 -- Sanctions
-INSERT INTO Sanctionner (id_utilisateur, id_arg, id_moderateur, raison, type_sanction) VALUES
-(4, 15, 5, 'Contenu potentiellement inexact sur le changement climatique', 'Avertissement'),
-(5, 22, 2, 'Propos critiques juges excessifs sur l''education numerique', 'Avertissement'),
-(6, 31, 7, 'Argument considere comme provocateur sur l''economie collaborative', 'Banissement');
+INSERT INTO Sanctionner (id_arg, id_utilisateur, raison, type_sanction) VALUES
+(15, 3, 'Contenu potentiellement inexact sur le changement climatique', 'Avertissement'),
+(22, 2, 'Propos critiques juges excessifs sur l''education numerique', 'Avertissement'),
+(31, 2, 'Argument considere comme provocateur sur l''economie collaborative', 'Banissement');
 
 
 -- Valider

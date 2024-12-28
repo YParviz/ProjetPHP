@@ -95,16 +95,14 @@ CREATE TABLE Contenir(
 );
 
 CREATE TABLE Sanctionner(
-   id_utilisateur INT NOT NULL,
    id_arg INT NOT NULL,
    id_moderateur INT NOT NULL,
    date_sanction DATE NOT NULL DEFAULT CURRENT_DATE,
    raison VARCHAR(500),
    type_sanction typeSanction NOT NULL DEFAULT 'Avertissement',
-   PRIMARY KEY(id_utilisateur, id_arg, id_moderateur),
-   FOREIGN KEY(id_utilisateur) REFERENCES Utilisateur(id_utilisateur),
+   PRIMARY KEY(id_arg),
    FOREIGN KEY(id_arg) REFERENCES Argument(id_arg),
-   FOREIGN KEY(id_moderateur) REFERENCES Utilisateur(id_utilisateur)
+   FOREIGN KEY(id_utilisateur) REFERENCES Utilisateur(id_utilisateur)
 );
 
 CREATE TABLE Valider(
