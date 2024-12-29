@@ -1,10 +1,9 @@
 <?php
 $host = "localhost";
-$host_fac = "postgresql1.ensinfo.sciences.univ-nantes.prive";
-$dbname = "l3_alt_02";
-$user = "l3_alt_02";
-$password = "l3_alt_02";
-
+$host_fac = "postgresql1.ensinfo.sciences.univ-nantes.prive";   
+$dbname = "debatarena";
+$user = "thay";
+$password = "thay";
 try {
     // Connexion à PostgreSQL
     $pdo = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);

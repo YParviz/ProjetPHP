@@ -1,4 +1,9 @@
 -- Utilisateurs
+
+--Ajout d'un utilsiateur anonyme pour les suppressions de comptes utilisateur.
+INSERT INTO Utilisateur (id_utilisateur, email, pseudo, mdp, role, date_creation) VALUES
+(0, 'anonyme@email.com', 'Anonyme', 'Anonyme123', 'Utilisateur', CURRENT_DATE);
+
 INSERT INTO Utilisateur (email, pseudo, mdp, role, date_creation) VALUES
 ('jean.dupont@email.com', 'JeanD', 'mdp123', 'Utilisateur', '2024-01-15'),
 ('marie.bernard@email.com', 'MariB', 'securite456', 'Moderateur', '2024-01-20'),
@@ -167,17 +172,24 @@ INSERT INTO Voter (id_utilisateur, id_arg, date_vote) VALUES
 (6, 33, '2024-05-31'),
 (7, 34, '2024-06-01'),
 (8, 35, '2024-06-02'),
-(9, 36, '2024-06-03'),
+(9, 36, '2024-06-06'),
 
 -- Votes supplementaires pour economie Collaborative
-(2, 28, '2024-06-04'),
-(3, 31, '2024-06-05'),
-(4, 33, '2024-06-06'),
-(5, 35, '2024-06-07'),
-(6, 29, '2024-06-08'),
-(7, 32, '2024-06-09'),
-(8, 34, '2024-06-10'),
-(9, 30, '2024-06-11');
+(2, 28, '2025-01-04'),
+(3, 31, '2025-01-05'),
+(4, 33, '2025-01-06'),
+(3, 33, '2025-01-06'),
+(5, 35, '2025-01-07'),
+(6, 29, '2025-01-08'),
+(3, 29, '2025-01-18'),
+(4, 29, '2025-01-18'),
+(7, 32, '2025-01-09'),
+(8, 34, '2025-01-10'),
+(4, 34, '2025-01-10'),
+(2, 34, '2025-01-10'),
+(5, 34, '2025-01-10'),
+(9, 30, '2025-01-11');
+
 
 -- Signalements
 INSERT INTO Signaler (id_utilisateur, id_arg, date_signalement, est_valide) VALUES
