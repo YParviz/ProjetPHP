@@ -31,8 +31,6 @@ try {
     $stmt = $pdo->prepare("SELECT * FROM utilisateur WHERE email = :email AND mdp = :mdp");
     $stmt->execute(['email' => $email, 'mdp' => $mdp]);
 
-    echo "email:$email, mdp:$mdp";
-
     // Récupère le retour de la base sur la réussite ou non de l'oppération
     if ($stmt->rowCount() > 0) {
         $message = "Connexion réussie ! Bienvenue, $email.";
@@ -60,7 +58,7 @@ try {
         <input type="text" id="email" name="email" required>
         <br><br>
         <label for="mdp">Mot de passe :</label>
-        <input type="mdp" id="mdp" name="mdp" required>
+        <input type="password" id="mdp" name="mdp" required>
         <br><br>
         <a href="/PHP/register.php">Création d'un compte</a>
         <button type="submit">Se connecter</button>

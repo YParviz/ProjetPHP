@@ -4,10 +4,10 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // Elément de connexion pour la base de donnée pour le projet à mettre dans le .env
-$host = "postgresql1.ensinfo.sciences.univ-nantes.prive";
-$dbname = "l3_alt_02";
-$user = "l3_alt_02";
-$password = "l3_alt_02";
+$host = "localhost";
+$dbname = "debatarena";
+$user = "thay";
+$password = "thay";
 
 $message = ""; // Variable pour stocker le message à afficher
 
@@ -20,21 +20,24 @@ try {
     $mdp = "";
     $pseudo = "";
 
+    // Requête pour vérifier les emails et mdp
+    $stmt = $pdo->prepare("INSERT INTO Utilisateur (email, pseudo, mdp) VALUES (:email, :pseudo, :mdp)");
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Récupérer les données du formulaire
         $email = $_POST['email'];
         $mdp = $_POST['mdp'];
         $pseudo = $_POST['pseudo'];
+
+        // Remplissage de la requête avant envoi
+        $stmt->bindParam(':email', $email); //binParam sécurise les données envoyées dans la requette INSERT
+        $stmt->bindParam(':pseudo', $pseudo);
+        $stmt->bindParam(':mdp', $mdp);
+        $stmt->execute();
     }
 
 
-    // Requête pour vérifier les emails et mdp
-    $stmt = $pdo->prepare("INSERT INTO Utilisateur (email, pseudo, mdp) VALUES (:email, :pseudo, :mdp)");
-    $stmt->bindParam(':email', $email); //binParam sécurise les données envoyées dans la requette INSERT
-    $stmt->bindParam(':pseudo', $pseudo);
-    $stmt->bindParam(':mdp', $mdp);
-    $stmt->execute();
-
+    
     // Récupère le retour de la base sur la réussite ou non de l'oppération
     if ($stmt->rowCount() > 0) {
         $message = "Inscription réussie ! Bienvenue, $email.";
