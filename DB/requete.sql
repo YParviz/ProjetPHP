@@ -1,3 +1,3 @@
---Dans ce fichier vous retrouverez toute les requêtes rélaiser par le groupe Youssef, Firmin, Firdaws, Thomas concerne leur applciation Debate Arena
---Chaque requêtes seras précédent d'un commentaire expliquant ce qu'elle doit réaliser.
+--Dans ce fichier, vous retrouverez toutes les requêtes réalisées par le groupe Youssef, Firmin, Firdaws, et Thomas concernant leur application Debate Arena.
+--Chaque requête sera précédée d'un commentaire expliquant son objectif et sa fonction.
 

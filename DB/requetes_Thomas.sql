@@ -44,13 +44,13 @@ SELECT id_utilisateur, email, pseudo, role, date_creation
 FROM Utilisateur
 WHERE id_utilisateur = 4; -- Remplacer 4 par l'ID de l'utilisateur consulté
 
--- Requête pour récupérer le top 10 des débatteurs qui ont le plus de votes sur le mois
+-- Requête pour récupérer le top 10 des débatteurs qui ont le plus de votes sur un mois donnée
 SELECT U.id_utilisateur, U.pseudo, COUNT(V.id_arg) AS votes_reçus
 FROM Utilisateur U
 JOIN Argument A ON U.id_utilisateur = A.id_utilisateur
 JOIN Voter V ON A.id_arg = V.id_arg
-WHERE DATE_PART('month', V.date_vote) = EXTRACT(MONTH FROM CURRENT_DATE)
-  AND EXTRACT(YEAR FROM V.date_vote) = EXTRACT(YEAR FROM CURRENT_DATE)
+WHERE DATE_PART('month', V.date_vote) = 5 -- Remplacer 5 (mai) par le mois donné
+  AND EXTRACT(YEAR FROM V.date_vote) = 2024 -- Remplacer 2024 par l'année donnée
 GROUP BY U.id_utilisateur, U.pseudo
 ORDER BY votes_reçus DESC
 LIMIT 10;
