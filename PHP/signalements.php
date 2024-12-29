@@ -55,10 +55,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // Supprime le signalement après validation
-        $query_delete = "DELETE FROM Signaler WHERE id_utilisateur = :id_utilisateur AND id_arg = :id_arg";
-        $stmt_delete = $pdo->prepare($query_delete);
-        $stmt_delete->execute(['id_utilisateur' => $id_utilisateur, 'id_arg' => $id_arg]);
+        // Met à jour le signalement en le marquant comme validé
+        $query_update = "UPDATE Signaler SET est_valide = TRUE 
+                 WHERE id_utilisateur = :id_utilisateur AND id_arg = :id_arg";
+        $stmt_update = $pdo->prepare($query_update);
+        $stmt_update->execute(['id_utilisateur' => $id_utilisateur, 'id_arg' => $id_arg]);
         $message = "Signalement validé.";
     } elseif ($action === 'ne_pas_valider') {
         // Supprimer le signalement sans autre action
