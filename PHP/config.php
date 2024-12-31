@@ -1,16 +1,17 @@
 <?php
-$servername = "";
-$username = "";
-$password = "";
+$host = "localhost";
+$port = "5432";
 $dbname = "debatarena";
+$user = "";
+$password = "";
 
 // Créer une connexion
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$password");
 
 // Vérifier la connexion
-if ($conn->connect_error) {
-    die("La connexion a échoué: " . $conn->connect_error);
-}
-?>  echo "Connexion réussie à la base de données.<br>";
+if (!$conn) {
+    die("La connexion a échoué: " . pg_last_error());
+} else {
+    echo "Connexion réussie à la base de données.<br>";
 }
 ?>
