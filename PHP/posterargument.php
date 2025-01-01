@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo "ID Utilisateur: " . $id_utilisateur . "<br>";
 
     // Insérer l'argument dans la table Argument
-    $sql = "INSERT INTO Argument (date_arg, texte, id_camp, id_utilisateur, id_arg_principal) VALUES (NOW(), $1, $2, $3, $4)";
+    $sql = "INSERT INTO Argument (date_poste, texte, id_camp, id_utilisateur, id_arg_principal) VALUES (NOW(), $1, $2, $3, $4)";
     $result = pg_query_params($conn, $sql, array($argument, $camp, $id_utilisateur, $id_arg_principal));
     
     // Vérifier si la requête a réussi

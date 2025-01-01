@@ -10,7 +10,7 @@
             <option value="">Sélectionnez un débat</option>
             <?php
             include 'config.php';
-            $result = pg_query($conn, "SELECT id_debat, nom_d FROM Debat WHERE est_valide = true");
+            $result = pg_query($conn, "SELECT id_debat, nom_d FROM Debat WHERE statut = 'Valide'");
             while ($row = pg_fetch_assoc($result)) {
                 echo "<option value='" . $row['id_debat'] . "'>" . htmlspecialchars($row['nom_d']) . "</option>";
             }
