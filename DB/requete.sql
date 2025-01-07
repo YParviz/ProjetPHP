@@ -1,24 +1,6 @@
 --Dans ce fichier, vous retrouverez toutes les requêtes réalisées par le groupe Youssef, Firmin, Firdaws, et Thomas concernant leur application Debate Arena.
 --Chaque requête sera précédée d'un commentaire expliquant son objectif et sa fonction.
 
---Requêtes CRUD
---CRUD Débat
-
-
---CRUD Utilisateur
--- Requête pour créer les comptes des nouveaux utilisateurs
-INSERT INTO Utilisateur (email, pseudo, mdp, role, date_creation) VALUES
-('johndoe@example.com', 'JohnDoe', 'password123', 'Utilisateur', CURRENT_DATE);
-
--- Requête pour un utilisateur qui se log sur l’application
-SELECT id_utilisateur, pseudo, email ,role
-FROM Utilisateur
-WHERE email = 'johndoe@example.com' AND mdp = 'password123';
-
--- Requête de modification du mot de passe
-UPDATE Utilisateur
-SET mdp = 'newpassword'
-WHERE id_utilisateur = 1;
 
 -- Requête de suppression de compte, Pour cela, il faut d'abord transférer les débats, arguments, votes et signalements liés à 
 --l'utilisateur vers l'utilisateur anonyme. Cela permet de conserver les données générées tout en supprimant le compte.
@@ -26,33 +8,26 @@ WHERE id_utilisateur = 1;
   -- Détacher les débats de l'utilisateur en mettant id_utilisateur à 0 il concerne l'utilisateur anonyme
   UPDATE Debat
   SET id_utilisateur = 0
-  WHERE id_utilisateur = 1;
+  WHERE id_utilisateur = {$VAR_USER};
 
   -- Détacher les arguments de l'utilisateur en mettant id_utilisateur à 0 il concerne l'utilsiateur anonyme
   UPDATE Argument
   SET id_utilisateur = 0
-  WHERE id_utilisateur = 1;
+  WHERE id_utilisateur = {$VAR_USER};
 
   -- Détacher les votes de l'utilisateur en mettant id_utilisateur à 0 il concerne l'utilsiateur anonyme
   UPDATE Voter
   SET id_utilisateur = 0
-  WHERE id_utilisateur = 1;
+  WHERE id_utilisateur = {$VAR_USER};
 
   -- Détacher les signalements de l'utilisateur en mettant id_utilisateur à 0 il concerne l'utilsiateur anonyme
   UPDATE Signaler
   SET id_utilisateur = 0
-  WHERE id_utilisateur = 1;
+  WHERE id_utilisateur = {$VAR_USER};
 
   -- Ensuite, supprimer l'utilisateur
   DELETE FROM Utilisateur
-  WHERE id_utilisateur = 1;
-
--- Requête pour récupérer les informations d'un utilisateur (consultation de profil)
-SELECT id_utilisateur, email, pseudo, role, date_creation
-FROM Utilisateur
-WHERE id_utilisateur = 4; -- Remplacer 4 par l'ID de l'utilisateur consulté
-
---CRUD Argument
+  WHERE id_utilisateur = {$VAR_USER};
 
 
 
@@ -137,8 +112,8 @@ SELECT U.id_utilisateur, U.pseudo, COUNT(V.id_arg) AS votes_reçus
 FROM Utilisateur U
 JOIN Argument A ON U.id_utilisateur = A.id_utilisateur
 JOIN Voter V ON A.id_arg = V.id_arg
-WHERE DATE_PART('month', V.date_vote) = 5 -- Remplacer 5 (mai) par le mois donné
-  AND EXTRACT(YEAR FROM V.date_vote) = 2024 -- Remplacer 2024 par l'année donnée
+WHERE DATE_PART('month', V.date_vote) = {$VAR_MOIS}
+  AND EXTRACT(YEAR FROM V.date_vote) = {$VAR_ANNEE}
 GROUP BY U.id_utilisateur, U.pseudo
 ORDER BY votes_reçus DESC
 LIMIT 10;
@@ -152,6 +127,101 @@ WHERE EXTRACT(YEAR FROM V.date_vote) = EXTRACT(YEAR FROM CURRENT_DATE)
 GROUP BY U.id_utilisateur, U.pseudo
 ORDER BY votes_reçus DESC
 LIMIT 10;
+
+
+
+-- Requêtes de statistiques utilisateur
+--Le nombre de débats auquel il a participé avec des arguments.
+
+SELECT COUNT(DISTINCT D.id_debat) AS nombre_debats_participes
+FROM Argument A
+JOIN Camp C ON A.id_camp = C.id_camp
+JOIN Debat D ON C.id_debat = D.id_debat
+WHERE A.id_utilisateur = {$VAR_USER};
+
+--Le nombre de votes qu'il a consommé et sur quel débat et ce sur tous les débats
+
+SELECT D.id_debat, COUNT(V.id_arg) AS nombre_de_votes
+FROM Utilisateur U
+JOIN Voter V ON U.id_utilisateur = V.id_utilisateur
+JOIN Argument A ON V.id_arg = A.id_arg
+JOIN Camp C ON A.id_camp = C.id_camp
+JOIN Debat D ON C.id_debat = D.id_debat
+WHERE U.id_utilisateur = {$VAR_USER}  
+GROUP BY D.id_debat;
+
+--Nombre de votes tous débats confondu :
+SELECT COUNT(V.id_arg) AS total_votes
+FROM Utilisateur U
+JOIN Voter V ON U.id_utilisateur = V.id_utilisateur
+WHERE U.id_utilisateur = {$VAR_USER};
+
+--Historique de ses participations ( ses arguments)
+
+--Si on veut tout l'historique : 
+SELECT A.id_arg, A.date_poste, A.texte, D.id_debat, D.nom_d, D.date_creation, C.nom_camp
+FROM Utilisateur U
+JOIN Argument A ON U.id_utilisateur = A.id_utilisateur
+JOIN Camp C ON A.id_camp = C.id_camp
+JOIN Debat D ON C.id_debat = D.id_debat
+WHERE U.id_utilisateur = {$VAR_USER}
+ORDER BY A.date_poste DESC;
+
+--Seulement le texte de l'argument : 
+SELECT A.texte
+FROM Utilisateur U
+JOIN Argument A ON U.id_utilisateur = A.id_utilisateur
+WHERE U.id_utilisateur = {$VAR_USER}
+ORDER BY A.date_poste DESC;
+
+
+--Le nombre de débat remporté par lui même(le nombre de débat où il a commenté dans un seul camp et que ce camp a gagné, si commenté dans les deux pas comptabilisé)
+
+SELECT COUNT(DISTINCT D.id_debat) AS nombre_debats_remportes
+FROM Utilisateur U
+JOIN Argument A ON U.id_utilisateur = A.id_utilisateur
+JOIN Camp C ON A.id_camp = C.id_camp
+JOIN Debat D ON C.id_debat = D.id_debat
+JOIN Statistique S ON D.id_debat = S.id_debat
+WHERE U.id_utilisateur = {$VAR_USER}
+AND C.id_camp = S.id_camp_gagnant
+AND NOT EXISTS (
+      SELECT 1
+      FROM Argument A2
+      JOIN Camp C2 ON A2.id_camp = C2.id_camp
+      WHERE A2.id_utilisateur = U.id_utilisateur
+        AND C2.id_debat = D.id_debat
+        AND C2.id_camp <> C.id_camp
+ );
+
+--le nombre de débat auquel il a participé (argument ou vote)
+
+SELECT COUNT(DISTINCT D.id_debat) AS nombre_debats_participes
+FROM Debat D
+LEFT JOIN Camp C ON D.id_debat = C.id_debat
+LEFT JOIN Argument A ON C.id_camp = A.id_camp
+LEFT JOIN Voter V ON A.id_arg = V.id_arg
+WHERE A.id_utilisateur = {$VAR_USER} OR V.id_utilisateur = {$VAR_USER};
+
+--Le nombre de débat créé
+
+SELECT COUNT(*) AS nombre_debats_crees
+FROM Debat
+WHERE id_utilisateur = {$VAR_USER};
+
+--Le nombre d'arguments postés
+
+SELECT COUNT(*) AS nombre_arguments_postes
+FROM Argument
+WHERE id_utilisateur = {$VAR_USER};
+
+--Le nombre total de votes reçu pour ses propres arguments
+
+SELECT COUNT(*) AS total_votes_recus
+FROM Argument A
+JOIN Voter V ON A.id_arg = V.id_arg
+WHERE A.id_utilisateur = {$VAR_USER};
+
 
 
 --Requêtes de modération
@@ -201,13 +271,6 @@ from debat
 where statut = 'Attente';
 
 --Liste des sous-arguments qui dépasse l’argument principal en nombre de votes pour le valider.
-SELECT argument.id_arg, argument.texte, argument.id_camp
-from argument
-inner join valider on argument.id_arg=valider.id_arg
-inner join voter on valider.id_arg=voter.id_arg
-where ?je bloque
-
-
 SELECT A1.id_arg
 FROM Argument A1 JOIN Voter Vo1 ON A1.id_arg = Vo1.id_arg
                 LEFT OUTER JOIN Valider Va ON A1.id_arg = Va.id_arg
@@ -222,131 +285,3 @@ HAVING COUNT(*) > (
     WHERE A2.id_arg = A1.id_arg_principal -- Lien avec le premier argument
     GROUP BY A2.id_arg
 );
-
---Administrateur
-
---CRUD(Récupération, suppression, ajout, modif) sur la liste des modérateurs.
---Création :
-INSERT INTO utilisateur (date_création,email,id_utilisateur,mdp,pseudo,role) VALUES ('02/02/2020','mimi@gmail.com',6,'1234abcd','mimi123','3')
-
---Lecture :
-Select * 
-from utilisateur
-where role = 3;
-
---Modification d'un pseudo :
-Update utilisateur
-set pseudo = 'mumu'
-where id-utilisateur = 6;
-
---Suppression d'un utilisateur :
-Delete from utilisateur
-where id_utilisateur = 6;
-
---CRUD(Récupération, suppression, ajout, modif) sur la liste des catégories.
---Création : 
-INSERT INTO categorie (desc_c,nom_c) VALUES ('plantes tropicales','Plantes')
-
---Lecture :
-Select * 
-from categorie ;
-
---Modification d'un pseudo :
-Update categorie
-set desc_c = 'plantes des tropiques'
-where desc_c like 'plantes tropicales';
-
---Suppression :
-Delete from categorie
-where desc_c like 'plantes des tropiques';
-
---Le nombre de débats auquel il a participé avec des arguments.
-
-SELECT COUNT(DISTINCT D.id_debat) AS nombre_debats_participes
-FROM Argument A
-JOIN Camp C ON A.id_camp = C.id_camp
-JOIN Debat D ON C.id_debat = D.id_debat
-WHERE A.id_utilisateur = 'id_utilisateur';
-
---Le nombre de votes qu'il a consommé et sur quel débat et ce sur tous les débats
-
-SELECT D.id_debat, COUNT(V.id_arg) AS nombre_de_votes
-FROM Utilisateur U
-JOIN Voter V ON U.id_utilisateur = V.id_utilisateur
-JOIN Argument A ON V.id_arg = A.id_arg
-JOIN Camp C ON A.id_camp = C.id_camp
-JOIN Debat D ON C.id_debat = D.id_debat
-WHERE U.id_utilisateur = 'id_utilisateur'  
-GROUP BY D.id_debat;
-
---Nombre de votes tous débats confondu :
-SELECT COUNT(V.id_arg) AS total_votes
-FROM Utilisateur U
-JOIN Voter V ON U.id_utilisateur = V.id_utilisateur
-WHERE U.id_utilisateur = 'id_utilisateur';
-
---Historique de ses participations ( ses arguments)
-
---Si on veut tout l'historique : 
-SELECT A.id_arg, A.date_poste, A.texte, D.id_debat, D.nom_d, D.date_creation, C.nom_camp
-FROM Utilisateur U
-JOIN Argument A ON U.id_utilisateur = A.id_utilisateur
-JOIN Camp C ON A.id_camp = C.id_camp
-JOIN Debat D ON C.id_debat = D.id_debat
-WHERE U.id_utilisateur = 'id_utilisateur'
-ORDER BY A.date_poste DESC;
-
---Seulement le texte de l'argument : 
-SELECT A.texte
-FROM Utilisateur U
-JOIN Argument A ON U.id_utilisateur = A.id_utilisateur
-WHERE U.id_utilisateur = 'id_utilisateur'
-ORDER BY A.date_poste DESC;
-
-
---Le nombre de débat remporté par lui même(le nombre de débat où il a commenté dans un seul camp et que ce camp a gagné, si commenté dans les deux pas comptabilisé)
-
-SELECT COUNT(DISTINCT D.id_debat) AS nombre_debats_remportes
-FROM Utilisateur U
-JOIN Argument A ON U.id_utilisateur = A.id_utilisateur
-JOIN Camp C ON A.id_camp = C.id_camp
-JOIN Debat D ON C.id_debat = D.id_debat
-JOIN Statistique S ON D.id_debat = S.id_debat
-WHERE U.id_utilisateur = 5
-AND C.id_camp = S.id_camp_gagnant
-AND NOT EXISTS (
-      SELECT 1
-      FROM Argument A2
-      JOIN Camp C2 ON A2.id_camp = C2.id_camp
-      WHERE A2.id_utilisateur = U.id_utilisateur
-        AND C2.id_debat = D.id_debat
-        AND C2.id_camp <> C.id_camp
- );
-
---le nombre de débat auquel il a participé (argument ou vote)
-
-SELECT COUNT(DISTINCT D.id_debat) AS nombre_debats_participes
-FROM Debat D
-LEFT JOIN Camp C ON D.id_debat = C.id_debat
-LEFT JOIN Argument A ON C.id_camp = A.id_camp
-LEFT JOIN Voter V ON A.id_arg = V.id_arg
-WHERE A.id_utilisateur = 'id_utilisateur' OR V.id_utilisateur = 'id_utilisateur';
-
---Le nombre de débat créé
-
-SELECT COUNT(*) AS nombre_debats_crees
-FROM Debat
-WHERE id_utilisateur = 'id_utilisateur';
-
---Le nombre d'arguments postés
-
-SELECT COUNT(*) AS nombre_arguments_postes
-FROM Argument
-WHERE id_utilisateur = 'id_utilisateur';
-
---Le nombre total de votes reçu pour ses propres  arguments
-
-SELECT COUNT(*) AS total_votes_recus
-FROM Argument A
-JOIN Voter V ON A.id_arg = V.id_arg
-WHERE A.id_utilisateur = 'id_utilisateur';
