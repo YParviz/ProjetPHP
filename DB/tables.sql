@@ -14,7 +14,7 @@ DROP TYPE typeSanction CASCADE;
 DROP TYPE statutDebat CASCADE;
 
 CREATE TYPE roleUtilisateur AS ENUM('Utilisateur', 'Moderateur', 'Administrateur');
-CREATE TYPE typeSanction AS ENUM('Avertissement', 'Banissement');
+CREATE TYPE typeSanction AS ENUM('Avertissement', 'Bannissement');
 CREATE TYPE statutDebat AS ENUM('Attente', 'Valide', 'Ferme');
 
 CREATE TABLE Utilisateur(
