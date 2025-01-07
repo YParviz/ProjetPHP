@@ -4,10 +4,10 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // Elément de connexion pour la base de donnée pour le projet à mettre dans le .env
-$host = "localhost";
-$dbname = "debatarena";
-$user = "thay";
-$password = "thay";
+$host = "postgresql1.ensinfo.sciences.univ-nantes.prive";
+$dbname = "l3_alt_02";
+$user = "l3_alt_02";
+$password = "l3_alt_02";
 
 $message = ""; // Variable pour stocker le message à afficher
 
