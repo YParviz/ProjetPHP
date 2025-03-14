@@ -11,5 +11,8 @@
             "email": "firmin.eon@etu.univ-nantes.fr"
         }
     ],
-    "require": {}
+    "require": {
+        "nikic/fast-route": "^1.3",
+        "symfony/dotenv": "^7.2"
+    }
 }
