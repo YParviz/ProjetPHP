@@ -1,0 +1,8 @@
+ca1d7f,127.0.0.1,GET,http://localhost:8000/,1741031161,,404,request
+2c7d18,127.0.0.1,GET,http://localhost:8000/,1741037369,,404,request
+36a99a,127.0.0.1,GET,http://localhost:8080/,1741037518,,404,request
+dbef7c,127.0.0.1,GET,http://localhost:8080/,1741037941,,200,request
+639227,127.0.0.1,GET,http://localhost:8080/,1741038085,,200,request
+90b406,127.0.0.1,GET,http://localhost:8080/?name=John,1741038389,8cddc5,500,request
+8cddc5,127.0.0.1,GET,http://localhost:8080/?name=John,1741038389,,500,request
+a1930a,127.0.0.1,GET,http://localhost:8080/?name=John,1741038414,,200,request
