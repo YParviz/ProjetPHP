@@ -2,7 +2,11 @@
     "name": "univ-nantes/debate-arena",
     "autoload": {
         "psr-4": {
-            "UnivNantes\\DebateArena\\": "src/"
+            "Controllers\\": "src\\app\\Controllers",
+            "Entity\\": "src\\app\\Entity",
+            "Models\\": "src\\app\\Models",
+            "Views\\": "src\\app\\Views",
+            "Util\\": "src\\util"
         }
     },
     "authors": [
