@@ -2,15 +2,17 @@
 
 namespace Entity;
 
+use DateTime;
+
 class Argument {
     private int $id;
     private string $texte;
     private int $idCamp;
     private int $idArgPrincipal;
     private int $idUtilisateur;
-    private string $datePoste;
+    private DateTime $datePoste;
 
-    public function __construct(int $id, string $texte, int $idCamp, ?int $idArgPrincipal, int $idUtilisateur, string $datePoste) {
+    public function __construct(int $id, string $texte, int $idCamp, ?int $idArgPrincipal, int $idUtilisateur, DateTime $datePoste) {
         $this->id = $id;
         $this->texte = $texte;
         $this->idCamp = $idCamp;
@@ -34,6 +36,6 @@ class Argument {
     public function getIdUtilisateur(): int { return $this->idUtilisateur; }
     public function setIdUtilisateur(int $idUtilisateur): void { $this->idUtilisateur = $idUtilisateur; }
 
-    public function getDatePoste(): string { return $this->datePoste; }
-    public function setDatePoste(string $datePoste): void { $this->datePoste = $datePoste; }
+    public function getDatePoste(): DateTime { return $this->datePoste; }
+    public function setDatePoste(DateTime $datePoste): void { $this->datePoste = $datePoste; }
 }
