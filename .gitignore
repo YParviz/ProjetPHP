@@ -2,3 +2,4 @@
 
 # Fichier PC Firmin pas à mettre sur Git
 firmin_*
+/vendor/

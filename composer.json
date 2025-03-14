@@ -1,0 +1,15 @@
+{
+    "name": "univ-nantes/debate-arena",
+    "autoload": {
+        "psr-4": {
+            "UnivNantes\\DebateArena\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Firmin EON",
+            "email": "firmin.eon@etu.univ-nantes.fr"
+        }
+    ],
+    "require": {}
+}
