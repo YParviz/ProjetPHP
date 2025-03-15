@@ -1,6 +1,6 @@
 -- Utilisateurs
 
---Ajout d'un utilsiateur anonyme pour les suppressions de comptes utilisateur.
+-- Ajout d'un utilsiateur anonyme pour les suppressions de comptes utilisateur.
 INSERT INTO Utilisateur (id_utilisateur, email, pseudo, mdp, role, date_creation) VALUES
 (0, 'anonyme@email.com', 'Anonyme', 'Anonyme123', 'Utilisateur', CURRENT_DATE);
 
