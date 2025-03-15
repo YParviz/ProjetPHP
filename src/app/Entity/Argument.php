@@ -9,14 +9,16 @@ class Argument {
     private ?int $idArgPrincipal;
     private int $userId;
     private string $datePosted;
+    private int $voteNumber;
 
-    public function __construct(int $id, string $text, int $idCamp, ?int $idArgPrincipal, int $userId, string $datePosted) {
+    public function __construct(int $id, string $text, int $idCamp, ?int $idArgPrincipal, int $userId, string $datePosted, int $voteNumber) {
         $this->id = $id;
         $this->text = $text;
         $this->idCamp = $idCamp;
         $this->idArgPrincipal = $idArgPrincipal;
         $this->userId = $userId;
         $this->datePosted = $datePosted;
+        $this->voteNumber = $voteNumber;
     }
 
     public function getId(): int { return $this->id; }
@@ -36,4 +38,7 @@ class Argument {
 
     public function getDatePosted(): string { return $this->datePosted; }
     public function setDatePosted(string $datePosted): void { $this->datePosted = $datePosted; }
+
+    public function getVoteNumber(): int { return $this->voteNumber; }
+    public function setVoteNumber(int $voteNumber): void { $this->voteNumber = $voteNumber; }
 }
