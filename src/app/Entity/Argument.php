@@ -8,11 +8,11 @@ class Argument {
     private int $id;
     private string $texte;
     private int $idCamp;
-    private int $idArgPrincipal;
+    private ?int $idArgPrincipal;
     private int $idUtilisateur;
-    private DateTime $datePoste;
+    private string $datePoste;
 
-    public function __construct(int $id, string $texte, int $idCamp, ?int $idArgPrincipal, int $idUtilisateur, DateTime $datePoste) {
+    public function __construct(int $id, string $texte, int $idCamp, ?int $idArgPrincipal, int $idUtilisateur, string $datePoste) {
         $this->id = $id;
         $this->texte = $texte;
         $this->idCamp = $idCamp;

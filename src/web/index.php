@@ -22,6 +22,13 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
     $r->get('/', function() {
         echo 'Page d\'accueil';
     });
+
+    $r->addRoute(["GET", "POST"], '/argument/{id:\d}', function ($args) {
+        $amodel = new \Models\ArgumentModel();
+        $argument = $amodel->getById($args['id']);
+        $acontroller = new \Controllers\ArgumentController;
+        $acontroller->print($argument);
+    });
 });
 
 
