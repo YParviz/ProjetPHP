@@ -1,0 +1,26 @@
+.arguments {
+    display: flex;
+}
+
+.camp1 {
+    margin-right: 40px;
+}
+
+.argument1 {
+    background-color: #A6B1E1;
+    border-radius: 22px;
+    padding: 1px;
+    margin-bottom: 10px;
+}
+
+.argument2 {
+    background-color: #FE5F55;
+    border-radius: 22px;
+    padding: 1px;
+    margin-bottom: 10px;
+}
+
+.center {
+    text-align: center;
+
+}

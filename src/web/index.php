@@ -1,5 +1,6 @@
 <?php
 
+use Controllers\ArgumentController;
 use Symfony\Component\Dotenv\Dotenv;
 
 if(file_exists(__DIR__.'/../../vendor/autoload.php')){
@@ -21,6 +22,17 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
 
     $r->get('/', function() {
         echo 'Page d\'accueil';
+    });
+
+    $r->addRoute(["GET", "POST"], '/argument/{id:\d}', function ($args) {
+        $amodel = new \Models\ArgumentModel();
+        $argument = $amodel->getById($args['id']);
+        $acontroller = new ArgumentController;
+        $acontroller->print($argument);
+    });
+
+    $r->addRoute(["GET", "POST"], '/debate/{idDebate:\d}/arguments', function ($args) {
+        ArgumentController::list($args['idDebate']);
     });
 });
 
