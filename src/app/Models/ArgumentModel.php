@@ -26,17 +26,41 @@ class ArgumentModel
 
     public function getByDebat(int $idDebat): array
     {
-        $statement = $this->pdo->prepare("SELECT * FROM Argument NATURAL JOIN Camp WHERE id_debat = :id_debat AND id_arg_principal IS NULL");
+        $statement = $this->pdo->prepare(
+            "SELECT Argument.id_arg, Argument.date_poste, Argument.texte, id_camp, Argument.id_arg_principal, Argument.id_utilisateur
+                    FROM Argument NATURAL JOIN Camp
+                    JOIN Debat ON Camp.id_debat = Debat.id_debat
+                    WHERE Debat.id_debat = :id_debat
+                      AND id_arg_principal IS NULL"
+        );
         $statement->execute(["id_debat" => $idDebat]);
         $arguments = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         $argumentsList = [[],[]];
         foreach ($arguments as $argument) {
+            $argument["sous_arguments"] = $this->getAllSousArguments($argument["id_arg"]);
             if ($argument["id_camp"] % 2 == 1){
                 $argumentsList[0][] = $this->createByTab($argument);
             } else {
                 $argumentsList[1][] = $this->createByTab($argument);
             }
+        }
+        return $argumentsList;
+    }
+
+    public function getAllSousArguments(int $idArgument): array
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT Argument.id_arg, Argument.date_poste, Argument.texte, id_camp, Argument.id_arg_principal, Argument.id_utilisateur
+                    FROM Argument NATURAL JOIN Camp
+                    WHERE id_arg_principal = :id_arg"
+        );
+        $statement->execute(["id_arg" => $idArgument]);
+        $arguments = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $argumentsList = [];
+        foreach ($arguments as $argument) {
+            $argumentsList[] = $this->createByTab($argument);
         }
         return $argumentsList;
     }
@@ -59,6 +83,11 @@ class ArgumentModel
         return $statement->rowCount() === 1;
     }
 
+    public function voter(Argument $argument): bool
+    {
+        return true;
+    }
+
     private function getVotesNumber(int $argumentId): int {
         $statement = $this->pdo->prepare("SELECT COUNT(*) FROM Voter WHERE id_arg = :id");
         $statement->execute(["id" => $argumentId]);
@@ -67,6 +96,7 @@ class ArgumentModel
 
     private function createByTab($argument): Argument
     {
+        $sousArguments = isset($argument["sous_arguments"]) ? $argument["sous_arguments"] : [];
         return new Argument(
             $argument["id_arg"],
             $argument["texte"],
@@ -74,7 +104,8 @@ class ArgumentModel
             $argument["id_arg_principal"],
             $argument["id_utilisateur"],
             $argument["date_poste"],
-            $this->getVotesNumber($argument["id_arg"])
+            $this->getVotesNumber($argument["id_arg"]),
+            $sousArguments
         );
     }
 
