@@ -19,31 +19,27 @@ class DebatModel
      */
     public function getAllDebatsSortedByParticipants(int $limit, int $offset): array
     {
-        // Préparation de la requête pour récupérer les débats valides
         $stmt = $this->db->prepare(
-            "SELECT d.*, 
-            (
-                SELECT COUNT(DISTINCT a.id_utilisateur) 
-                FROM Argument a
-                JOIN Camp c ON a.id_camp = c.id_camp
-                WHERE c.id_debat = d.id_debat
-            ) 
-            +
-            (
-                SELECT COUNT(DISTINCT v.id_utilisateur) 
-                FROM Voter v
-                JOIN Argument a ON v.id_arg = a.id_arg
-                JOIN Camp c ON a.id_camp = c.id_camp
-                WHERE c.id_debat = d.id_debat
-            ) 
-            AS total_participants
-        FROM Debat d
-        WHERE d.statut = 'Valide'  -- Filtrer uniquement les débats validés
-        ORDER BY total_participants DESC
-        LIMIT :limit OFFSET :offset"
+            "SELECT d.*,
+        (SELECT COUNT(DISTINCT a.id_utilisateur) 
+         FROM Argument a
+         JOIN Camp c ON a.id_camp = c.id_camp
+         WHERE c.id_debat = d.id_debat)
+        +
+        (SELECT COUNT(DISTINCT v.id_utilisateur) 
+         FROM Voter v
+         JOIN Argument a ON v.id_arg = a.id_arg
+         JOIN Camp c ON a.id_camp = c.id_camp
+         WHERE c.id_debat = d.id_debat)
+        AS total_participants
+    FROM Debat d
+    WHERE d.statut = 'Valide'
+    ORDER BY total_participants DESC
+    LIMIT :limit OFFSET :offset"
         );
 
-        // Liaison des paramètres
+
+        // Liaison des paramètres pour récupérer les débats actuels
         $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
         $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
@@ -62,14 +58,19 @@ class DebatModel
             );
         }
 
-        // Vérifier si on a obtenu moins de résultats que la limite
-        if (count($debats) < $limit) {
-            // S'il y a moins de résultats que prévu, on peut considérer qu'il n'y a plus de débats
-            $noMoreDebates = true;
-        } else {
-            // Sinon, il y a potentiellement encore des débats à charger
-            $noMoreDebates = false;
-        }
+        // Vérifier s'il y a des débats sur la page suivante
+        $nextOffset = $offset + $limit;
+        $stmt = $this->db->prepare(
+            "SELECT COUNT(*) 
+        FROM Debat d
+        WHERE d.statut = 'Valide'"
+        );
+
+        $stmt->execute();
+        $totalDebats = $stmt->fetchColumn();
+
+        // Si la page suivante contient des débats, alors il y a encore des débats à afficher
+        $noMoreDebates = ($nextOffset >= $totalDebats);
 
         // Retourner les débats ainsi que l'information sur la pagination
         return [
@@ -77,6 +78,7 @@ class DebatModel
             'noMoreDebates' => $noMoreDebates
         ];
     }
+
 
 
     public function calculateStatsForDebat(int $idDebat): array
@@ -155,9 +157,23 @@ class DebatModel
     {
         $stmt = $this->db->prepare("SELECT * FROM Debat WHERE id_debat = :id LIMIT 1");
         $stmt->execute(['id' => $id]);
+
+        if ($stmt->errorCode() !== '00000') {
+            file_put_contents(__DIR__ . '/debug.log', "Erreur SQL : " . print_r($stmt->errorInfo(), true) . "\n", FILE_APPEND);
+            return null;
+        }
+
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$row) {
+            file_put_contents(__DIR__ . '/debug.log', "Aucun débat trouvé avec l'ID : $id\n", FILE_APPEND);
+            return null;
+        }
+
+        try {
+            $dateCreation = new \DateTime($row['date_creation']);
+        } catch (\Exception $e) {
+            file_put_contents(__DIR__ . '/debug.log', "Erreur de conversion DateTime : " . $e->getMessage() . "\n", FILE_APPEND);
             return null;
         }
 
@@ -167,7 +183,7 @@ class DebatModel
             $row['desc_d'],
             $row['statut'],
             $row['duree'],
-            new \DateTime($row['date_creation']),
+            $dateCreation,
             $row['id_utilisateur']
         );
     }
@@ -175,7 +191,8 @@ class DebatModel
     public function getArgumentsByDebat(int $id): array
     {
         $stmt = $this->db->prepare("
-        SELECT a.* FROM Argument a
+        SELECT a.id_arg, a.texte, a.id_camp, a.id_arg_principal, a.id_utilisateur, a.date_poste, a.vote_number
+        FROM Argument a
         JOIN Camp c ON a.id_camp = c.id_camp
         WHERE c.id_debat = :id
     ");
@@ -184,15 +201,19 @@ class DebatModel
         $arguments = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $arguments[] = new Argument(
-                $row['id_arg'],
-                $row['id_utilisateur'],
-                $row['id_camp'],
-                $row['texte']
+                (int) $row['id_arg'],  // ID de l'argument
+                (string) $row['texte'], // Texte de l'argument
+                (int) $row['id_camp'], // ID du camp
+                isset($row['id_arg_principal']) ? (int) $row['id_arg_principal'] : null, // ID de l'argument principal, ou null
+                (int) $row['id_utilisateur'], // ID de l'utilisateur
+                (string) $row['date_poste'], // Date de publication
+                (int) $row['vote_number'] // Nombre de votes
             );
         }
 
         return $arguments;
     }
+
 
     public function getAllDebatsSortedByDate(int $limit, int $offset): array
     {

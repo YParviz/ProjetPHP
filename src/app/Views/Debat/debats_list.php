@@ -25,7 +25,8 @@
                 $pourcentageCamp2 = $statsDebat['pourcentage_camp_2'];
 
                 ?>
-                <a href="/debatarena/debat/<?= $debat->getId() ?>" class="debate-item">
+                <?php $basePath = '/DebatArena/src/web'; ?>
+                <a href="/DebatArena/src/web/debat/<?= $debat->getId() ?>" class="debate-item">
                     <div class="debate-title"><?= htmlspecialchars($debat->getName()) ?></div>
                 </a>
                 <div class="debate-stats"><?= $nbParticipants ?> participants</div>
@@ -89,7 +90,7 @@
             ?>
 
             <!-- Lien vers la page du débat -->
-            <a href="/debatarena/debat/<?= $debat->getId() ?>">
+            <a href="/DebatArena/src/web/debat/<?= $debat->getId() ?>" class="debate-item">
                 <div class="debat">
                     <h3><?= htmlspecialchars($debat->getName()) ?></h3>
                     <div class="debate-description"><?= htmlspecialchars($debat->getDescription()) ?></div>
@@ -119,28 +120,22 @@
             </ul>
         </div>
 
-        <!-- Pagination -->
         <div class="pagination">
             <!-- Bouton précédent -->
             <?php if ($page > 1): ?>
-                <a href="?page=<?= $page - 1 ?>">Précédent</a>
+                <a href="/DebatArena/src/web/debats/<?= $page - 1 ?>">Précédent</a>
             <?php else: ?>
                 <a href="#" class="disabled">Précédent</a>
             <?php endif; ?>
 
-            <!-- Vérifier s'il y a d'autres débats à afficher -->
-            <?php
-            $totalPages = ceil(count($debatsTendance) / 3);
-            $noMoreDebats = ($page >= $totalPages);
-            ?>
-
-            <!-- Bouton charger plus (si plus de débats) -->
-            <?php if (!$noMoreDebats): ?>
-                <a href="?page=<?= $page + 1 ?>">Suivant</a>
+            <!-- Vérifier s'il y a des débats sur la page suivante -->
+            <?php if (!$noMoreDebatsNextPage): ?>
+                <a href="/DebatArena/src/web/debats/<?= $page + 1 ?>">Page suivante</a>
             <?php else: ?>
                 <a href="#" class="disabled">Suivant</a>
             <?php endif; ?>
         </div>
+
     </div>
 
 
