@@ -1,3 +1,23 @@
-function redirect(idDebat, idArgument) {
-    window.location.href = "/debate/" + idDebat + "/arguments/" + idArgument + "/vote";
+function redirect(idArgument) {
+    fetch( '/vote', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+            "idArgument": idArgument
+        })
+    }).then(response => {
+            if (response.ok){
+                return response.text()
+            } else {
+                throw new Error("Un problème est survenu")
+            }
+        }
+    ).then(data => {
+        document.getElementById("numVoteArg" + idArgument).innerText = data + " votes"
+    })
+        .catch(error => {
+            alert("Vous avez déjà voté pour cet argument")
+        })
 }

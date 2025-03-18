@@ -3,6 +3,7 @@
 namespace Models;
 
 use Entity\Argument;
+use Exception;
 use PDO;
 use Util\Database;
 
@@ -31,7 +32,8 @@ class ArgumentModel
                     FROM Argument NATURAL JOIN Camp
                     JOIN Debat ON Camp.id_debat = Debat.id_debat
                     WHERE Debat.id_debat = :id_debat
-                      AND id_arg_principal IS NULL"
+                      AND id_arg_principal IS NULL
+                    ORDER BY Argument.date_poste"
         );
         $statement->execute(["id_debat" => $idDebat]);
         $arguments = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -53,7 +55,8 @@ class ArgumentModel
         $statement = $this->pdo->prepare(
             "SELECT Argument.id_arg, Argument.date_poste, Argument.texte, id_camp, Argument.id_arg_principal, Argument.id_utilisateur
                     FROM Argument NATURAL JOIN Camp
-                    WHERE id_arg_principal = :id_arg"
+                    WHERE id_arg_principal = :id_arg
+                    ORDER BY Argument.date_poste"
         );
         $statement->execute(["id_arg" => $idArgument]);
         $arguments = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -83,9 +86,20 @@ class ArgumentModel
         return $statement->rowCount() === 1;
     }
 
-    public function voter(Argument $argument): bool
+    public function vote(Argument $argument): bool
     {
-        return true;
+        try {
+            $statement = $this->pdo->prepare("INSERT INTO Voter (id_utilisateur, id_arg) VALUE (:id_utilisateur, :id_arg)");
+            $statement->execute([
+                "id_utilisateur" => 1,
+                "id_arg" => $argument->getId()
+            ]);
+        }
+        catch (Exception $e) {
+            return false;
+        }
+        $argument->setVoteNumber($argument->getVoteNumber()+1);
+        return $statement->rowCount() === 1;
     }
 
     private function getVotesNumber(int $argumentId): int {

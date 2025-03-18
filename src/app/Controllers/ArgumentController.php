@@ -25,14 +25,20 @@ class ArgumentController
         $view->render("Arguments/list", ["camp1" => $camps[0], "camp2" => $camps[1], "idDebat" => $idDebat, "arguments" => $arguments]);
     }
 
-    public static function voter(int $idDebate, int $idArgument): void
+    public static function voter(): void
     {
-        $argumentModel = new ArgumentModel();
-        $argument = $argumentModel->getById($idArgument);
-        if ($argumentModel->voter($argument)) {
-            header("location: /debate/$idDebate/arguments");
+
+        if (isset($_POST["idArgument"])) {
+            $idArgument = $_POST["idArgument"];
+            $argumentModel = new ArgumentModel();
+            $argument = $argumentModel->getById($idArgument);
+            if ($argumentModel->vote($argument)) {
+                echo $argument->getVoteNumber();
+            } else {
+                header($_SERVER["SERVER_PROTOCOL"] . " 500 Internal Server Error");
+            }
         } else {
-            header("", true, 500);
+            header($_SERVER["SERVER_PROTOCOL"] . " 500 Internal Server Error");
         }
     }
 }

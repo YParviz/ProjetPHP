@@ -4,7 +4,7 @@
 echo "<div class='argument'>";
 echo "<div class='argument".$argument->getNumCamp()."'>";
 echo "<p>".$argument->getText()."</p>";
-echo "<p class='center'><button onclick='redirect(".$idDebat.",".$argument->getId().")'>Voter</button>";
+echo "<p class='center' id='numVoteArg".$argument->getId()."'><button onclick='redirect(".$argument->getId().")'>Voter</button>";
 echo "  ".$argument->getVoteNumber()." votes</p>";
 echo "</div>";
 echo "<div class='sousArgument'>";
