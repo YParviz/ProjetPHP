@@ -21,14 +21,14 @@ class DebatController
     /**
      * @throws \DateMalformedStringException
      */
-    public function listDebats(): void
+    public function listDebats($page = 1): void
     {
-        $perPage = 5;
-        $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+        $perPage = 3; // Gardons 3 par page pour la pagination
+        $page = max(1, intval($page));
         $offset = ($page - 1) * $perPage;
 
         // Récupérer les débats tendance (par nombre de participants)
-        $responseTendance = $this->debatModel->getAllDebatsSortedByParticipants($perPage, $offset);
+        $responseTendance = $this->debatModel->getAllDebatsSortedByParticipants(1000, 0); // Récupérer tous les débats tendances
         $debatsTendance = $responseTendance['debats'];
         $noMoreDebatsTendance = $responseTendance['noMoreDebates'];
 
@@ -43,6 +43,11 @@ class DebatController
             $statsTendance[$debat->getId()] = $this->debatModel->calculateStatsForDebat($debat->getId());
         }
 
+        // Vérifiez s'il y a des débats sur la page suivante
+        $nextPageDebatsTendance = $this->debatModel->getAllDebatsSortedByParticipants($perPage, $offset + $perPage);
+        $nextPageDebatsRecents = $this->debatModel->getAllDebatsSortedByDate($perPage, $offset + $perPage);
+        $noMoreDebatsNextPage = empty($nextPageDebatsTendance['debats']) && empty($nextPageDebatsRecents['debats']);
+
         $statsRecents = [];
         foreach ($debatsRecents as $debat) {
             $statsRecents[$debat->getId()] = $this->debatModel->calculateStatsForDebat($debat->getId());
@@ -51,9 +56,12 @@ class DebatController
         // Récupération du classement des utilisateurs
         $userRanking = $this->userStatModel->getUserRankingByVotes(5);
 
-        extract(compact('debatsRecents', 'debatsTendance', 'statsRecents', 'statsTendance', 'perPage', 'page', 'noMoreDebatsRecents', 'noMoreDebatsTendance', 'userRanking'));
+        // Envoi des variables à la vue
+        extract(compact('debatsRecents', 'debatsTendance', 'statsRecents', 'statsTendance', 'perPage', 'page', 'noMoreDebatsRecents', 'noMoreDebatsTendance', 'userRanking', 'noMoreDebatsNextPage'));
         require_once __DIR__ . '/../Views/Debat/debats_list.php';
     }
+
+
 
 
     /**
@@ -61,10 +69,15 @@ class DebatController
      */
     public function viewDebat(int $id): void
     {
+        file_put_contents(__DIR__ . '/debug.log', "viewDebat appelé avec ID : $id\n", FILE_APPEND);
+
+        // Vous récupérez le débat avec l'ID
         $debat = $this->debatModel->getDebatById($id);
 
         if (!$debat) {
-            die("Débat introuvable !");
+            file_put_contents(__DIR__ . '/debug.log', "Débat non trouvé pour ID : $id\n", FILE_APPEND);
+            header("Location: /debats?error=notfound");
+            exit;
         }
 
         $arguments = $this->debatModel->getArgumentsByDebat($id);
@@ -72,4 +85,7 @@ class DebatController
         extract(compact('debat', 'arguments'));
         require_once __DIR__ . '/../Views/Debat/debat_detail.php';
     }
+
+
+
 }
