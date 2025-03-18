@@ -41,4 +41,8 @@ class Argument {
 
     public function getVoteNumber(): int { return $this->voteNumber; }
     public function setVoteNumber(int $voteNumber): void { $this->voteNumber = $voteNumber; }
+
+    public function getNumCamp(): int {
+        return $this->idCamp % 2 === 1 ? 1 : 2;
+    }
 }

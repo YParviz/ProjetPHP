@@ -6,15 +6,21 @@
     margin-right: 40px;
 }
 
-.argument1 {
-    background-color: #A6B1E1;
+.argument {
     border-radius: 22px;
     padding: 1px;
     margin-bottom: 10px;
 }
 
+.argument1 {
+    background-color: #A6B1E1;
+}
+
 .argument2 {
     background-color: #FE5F55;
+}
+
+.argument1, .argument2 {
     border-radius: 22px;
     padding: 1px;
     margin-bottom: 10px;
