@@ -34,6 +34,10 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
     $r->addRoute(["GET", "POST"], '/debate/{idDebate:\d}/arguments', function ($args) {
         ArgumentController::list($args['idDebate']);
     });
+
+    // $r->addRoute(["GET", "POST"], '/debate/{idDebate:\d}/arguments', function ($args) {
+    //     UserController::list($args['idDebate']);
+    // });
 });
 
 
