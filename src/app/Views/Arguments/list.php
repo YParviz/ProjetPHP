@@ -4,7 +4,7 @@ echo "<!DOCTYPE html>";
 echo "<html>";
 echo "<head>";
 echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"../../css/arguments/styleListArguments.css\" />";
-echo "<script src='../../css/arguments/listArguments.js'></script>";
+echo "<script src='../../js/arguments/listArguments.js'></script>";
 echo "</head>";
 
 echo "<body>";

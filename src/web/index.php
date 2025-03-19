@@ -36,7 +36,10 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
     });
 
     $r->post('/vote', function () {
-        ArgumentController::voter();
+        ArgumentController::vote();
+    });
+    $r->post('/unvote', function () {
+        ArgumentController::unvote();
     });
 });
 

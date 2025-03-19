@@ -102,7 +102,30 @@ class ArgumentModel
         return $statement->rowCount() === 1;
     }
 
-    private function getVotesNumber(int $argumentId): int {
+    public function unvote(Argument $argument): bool
+    {
+        try {
+            $statement = $this->pdo->prepare("DELETE FROM Voter WHERE id_arg = :id_arg AND id_utilisateur = :id_utilisateur");
+            $statement->execute([
+                "id_utilisateur" => 1,
+                "id_arg" => $argument->getId()
+            ]);
+        }
+        catch (Exception $e) {
+            return false;
+        }
+        $argument->setVoteNumber($argument->getVoteNumber()+1);
+        return $statement->rowCount() === 1;
+    }
+
+    public function getArgumentVoted(int $userId): array
+    {
+        $statement = $this->pdo->prepare("SELECT id_arg FROM Voter WHERE id_utilisateur = :id");
+        $statement->execute(["id" => $userId]);
+        return $statement->fetchAll(PDO::FETCH_COLUMN);
+    }
+    private function getVotesNumber(int $argumentId): int
+    {
         $statement = $this->pdo->prepare("SELECT COUNT(*) FROM Voter WHERE id_arg = :id");
         $statement->execute(["id" => $argumentId]);
         return $statement->fetchColumn();
