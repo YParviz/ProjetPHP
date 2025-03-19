@@ -17,7 +17,7 @@ class UserStatModel
         // On calcule le mois actuel
         $currentMonth = date('Y-m');
         $firstDayOfMonth = $currentMonth . '-01';
-        $lastDayOfMonth = date('Y-m-t'); // Dernier jour du mois courant
+        $lastDayOfMonth = date('Y-m-t');
 
         $query = "SELECT 
                     u.id_utilisateur, 

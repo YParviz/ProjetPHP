@@ -39,13 +39,11 @@ class DebatModel
         );
 
 
-        // Liaison des paramètres pour récupérer les débats actuels
         $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
         $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
 
         $debats = [];
-        // Récupérer tous les résultats
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $debats[] = new Debate(
                 $row['id_debat'],
@@ -58,7 +56,7 @@ class DebatModel
             );
         }
 
-        // Vérifier s'il y a des débats sur la page suivante
+        // Je verifie s'il y a des débats sur la page suivante
         $nextOffset = $offset + $limit;
         $stmt = $this->db->prepare(
             "SELECT COUNT(*) 
@@ -72,13 +70,11 @@ class DebatModel
         // Si la page suivante contient des débats, alors il y a encore des débats à afficher
         $noMoreDebates = ($nextOffset >= $totalDebats);
 
-        // Retourner les débats ainsi que l'information sur la pagination
         return [
             'debats' => $debats,
             'noMoreDebates' => $noMoreDebates
         ];
     }
-
 
 
     public function calculateStatsForDebat(int $idDebat): array
@@ -117,7 +113,7 @@ class DebatModel
         // Calcul du nombre total de votes
         $nbVotesTotal = array_sum($votes) ?: 0;
 
-        // Récupération du nombre total de participants distincts
+        // On cherche le nombre total de participants distincts (ayant soit voté, soit posté un argument)
         $queryParticipants = "
         SELECT COUNT(DISTINCT id_utilisateur) AS nb_participants
         FROM (
@@ -159,14 +155,12 @@ class DebatModel
         $stmt->execute(['id' => $id]);
 
         if ($stmt->errorCode() !== '00000') {
-            file_put_contents(__DIR__ . '/debug.log', "Erreur SQL : " . print_r($stmt->errorInfo(), true) . "\n", FILE_APPEND);
             return null;
         }
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$row) {
-            file_put_contents(__DIR__ . '/debug.log', "Aucun débat trouvé avec l'ID : $id\n", FILE_APPEND);
             return null;
         }
 
@@ -249,22 +243,20 @@ class DebatModel
             );
         }
 
-        // Vérifier si on a obtenu moins de résultats que la limite
+        // Si on a obtenu moins de résultats que la limite
         if (count($debats) < $limit) {
-            // S'il y a moins de résultats que prévu, on peut considérer qu'il n'y a plus de débats
+            // S'il y a moins de résultats que prévu, c'est qu'il n'y a plus de débats
             $noMoreDebates = true;
         } else {
-            // Sinon, il y a potentiellement encore des débats à charger
+            // Ya encore des débats
             $noMoreDebates = false;
         }
 
-        // Retourner les débats ainsi que l'information sur la pagination
         return [
             'debats' => $debats,
             'noMoreDebates' => $noMoreDebates
         ];
     }
-
 
 
 }

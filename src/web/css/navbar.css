@@ -3,36 +3,60 @@
     justify-content: space-between;
     align-items: center;
     background-color: #212c3d; /* Bleu foncé */
-    padding: 10px 20px;
+    padding: 12px 20px;
     color: white;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* Logo et Titre */
 .navbar__logo {
     display: flex;
     align-items: center;
-    gap: 10px; /* Espacement entre l'image et le texte */
+    gap: 12px; /* Espacement entre l'image et le texte */
+}
+
+.navbar__logo a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none; /* Supprimer le soulignement du lien */
+    color: inherit; /* Empêcher la couleur de changer */
 }
 
 .navbar__logo-img {
-    width: 40px; /* Ajuste la taille de l'image du logo */
+    width: 45px; /* Taille du logo */
     height: auto;
-    object-fit: contain; /* Garder l'aspect ratio de l'image */
+    object-fit: contain;
 }
 
 .navbar__logo span {
-    font-size: 1.6rem; /* Taille de la police du texte */
-    font-weight: bold; /* Mettre le texte en gras */
-    color: #f5f5f5; /* Couleur du texte */
-    letter-spacing: 1px; /* Espacement entre les lettres pour un effet plus moderne */
+    font-size: 1.7rem; /* Taille du texte */
+    font-weight: bold;
+    color: #f5f5f5;
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
+    display: inline-block; /* Empêcher le texte de bouger */
 }
 
+/* Empêcher soulignement au clic */
+.navbar__logo a:focus,
+.navbar__logo a:active {
+    outline: none;
+    text-decoration: none;
+}
+
+/* Effet au survol */
+.navbar__logo a:hover span {
+    color: #4fb3d8; /* Changement de couleur */
+}
+
+/* Barre de recherche */
 .navbar__search {
     display: flex;
     align-items: center;
-    background: #e5e5e5; /* Gris clair pour le fond de la barre de recherche */
+    background: #e5e5e5;
     border-radius: 20px;
-    padding: 5px 10px;
+    padding: 5px 12px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -44,23 +68,103 @@
     border-radius: 10px;
     width: 250px;
     transition: width 0.3s ease;
-    color: #333; /* Gris foncé pour le texte dans l'input */
+    color: #333;
+    font-size: 1rem;
 }
 
+/* Icône de recherche */
+.search-icon {
+    width: 20px;
+    cursor: pointer;
+}
+
+/* Bouton Créer un Débat */
 .create-debate {
-    background: #4fb3d8; /* Bleu turquoise */
+    background: #4fb3d8;
     color: white;
     padding: 10px 20px;
     border-radius: 25px;
     border: none;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s;
+    font-size: 1rem;
+    font-weight: bold;
 }
 
 .create-debate:hover {
-    background-color: #3e64e5; /* Bleu plus saturé pour le survol */
+    background-color: #3e64e5;
+    transform: scale(1.05);
 }
 
-.search-icon{
-    width:20px;
+/* Icône utilisateur */
+.user-icon {
+    font-size: 1.8rem;
+    color: white;
+    margin-left: 15px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.user-icon a {
+    color: inherit; /* Garder la couleur blanche */
+    text-decoration: none;
+}
+
+.user-icon:hover {
+    color: #4fb3d8;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .navbar__search input {
+        width: 200px;
+    }
+
+    .create-debate {
+        padding: 8px 15px;
+    }
+}
+
+/* Bouton Créer un Débat */
+.create-debate {
+    background: linear-gradient(135deg, #4fb3d8, #3e64e5); /* Dégradé bleu */
+    color: white;
+    padding: 12px 25px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    outline: none;
+    text-decoration: none;
+}
+
+/* Effet au survol */
+.create-debate:hover {
+    background: linear-gradient(135deg, #3e64e5, #4fb3d8);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Effet au clic */
+.create-debate:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Icône du bouton */
+.create-debate::before {
+    content: "+";
+    font-size: 1.2rem;
+    font-weight: bold;
 }
