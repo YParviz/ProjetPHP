@@ -9,83 +9,92 @@ class DebatController
 {
     private DebatModel $debatModel;
     private UserStatModel $userStatModel;
-    private PDO $db;
 
-    public function __construct(PDO $db)
+    public function __construct(DebatModel $debatModel, UserStatModel $userStatModel)
     {
-        $this->db = $db;
-        $this->debatModel = new DebatModel($db);
-        $this->userStatModel = new UserStatModel($db);
+        $this->debatModel = $debatModel;
+        $this->userStatModel = $userStatModel;
     }
 
-    /**
-     * @throws \DateMalformedStringException
-     */
+
+     // Liste des débats
+    // Contrôleur : listDebats
     public function listDebats($page = 1): void
     {
-        $perPage = 3; // Gardons 3 par page pour la pagination
-        $page = max(1, intval($page));
+        $perPage = 3; // Nombre de débats par page
+        $page = max(1, intval($page)); // Si $page est moins que 1, on le force à 1
         $offset = ($page - 1) * $perPage;
 
-        // Récupérer les débats tendance (par nombre de participants)
-        $responseTendance = $this->debatModel->getAllDebatsSortedByParticipants(1000, 0); // Récupérer tous les débats tendances
+        // Récupérer les débats tendance (par nombre de participants) - Limité à 3 par page
+        $responseTendance = $this->debatModel->getAllDebatsSortedByParticipants($perPage, $offset);
         $debatsTendance = $responseTendance['debats'];
-        $noMoreDebatsTendance = $responseTendance['noMoreDebates'];
 
-        // Récupérer les débats récents (par date)
+        // Récupérer les débats récents (par date) - Limité à 3 par page
         $responseRecents = $this->debatModel->getAllDebatsSortedByDate($perPage, $offset);
         $debatsRecents = $responseRecents['debats'];
-        $noMoreDebatsRecents = $responseRecents['noMoreDebates'];
 
-        // Calcul des statistiques pour les débats
-        $statsTendance = [];
-        foreach ($debatsTendance as $debat) {
-            $statsTendance[$debat->getId()] = $this->debatModel->calculateStatsForDebat($debat->getId());
-        }
+        // Calcul des statistiques pour les débats tendance
+        $statsTendance = $this->getDebatStats($debatsTendance);
+
+        // Calcul des statistiques pour les débats récents
+        $statsRecents = $this->getDebatStats($debatsRecents);
 
         // Vérifiez s'il y a des débats sur la page suivante
         $nextPageDebatsTendance = $this->debatModel->getAllDebatsSortedByParticipants($perPage, $offset + $perPage);
         $nextPageDebatsRecents = $this->debatModel->getAllDebatsSortedByDate($perPage, $offset + $perPage);
         $noMoreDebatsNextPage = empty($nextPageDebatsTendance['debats']) && empty($nextPageDebatsRecents['debats']);
 
-        $statsRecents = [];
-        foreach ($debatsRecents as $debat) {
-            $statsRecents[$debat->getId()] = $this->debatModel->calculateStatsForDebat($debat->getId());
-        }
-
         // Récupération du classement des utilisateurs
         $userRanking = $this->userStatModel->getUserRankingByVotes(5);
 
         // Envoi des variables à la vue
-        extract(compact('debatsRecents', 'debatsTendance', 'statsRecents', 'statsTendance', 'perPage', 'page', 'noMoreDebatsRecents', 'noMoreDebatsTendance', 'userRanking', 'noMoreDebatsNextPage'));
+        extract(compact('debatsRecents', 'debatsTendance', 'statsRecents', 'statsTendance', 'perPage', 'page', 'noMoreDebatsNextPage', 'userRanking'));
         require_once __DIR__ . '/../Views/Debat/debats_list.php';
     }
 
 
-
+    private function getDebatStats(array $debats): array
+    {
+        $stats = [];
+        foreach ($debats as $debat) {
+            $stats[$debat->getId()] = $this->debatModel->calculateStatsForDebat($debat->getId());
+        }
+        return $stats;
+    }
 
     /**
-     * @throws \DateMalformedStringException
+     * Vue d'un débat spécifique
      */
     public function viewDebat(int $id): void
     {
-        file_put_contents(__DIR__ . '/debug.log', "viewDebat appelé avec ID : $id\n", FILE_APPEND);
+        try {
+            $debat = $this->debatModel->getDebatById($id);
+            if (!$debat) {
+                header("Location: /debats?error=notfound");
+                exit;
+            }
 
-        // Vous récupérez le débat avec l'ID
-        $debat = $this->debatModel->getDebatById($id);
+            $arguments = $this->debatModel->getArgumentsByDebat($id);
 
-        if (!$debat) {
-            file_put_contents(__DIR__ . '/debug.log', "Débat non trouvé pour ID : $id\n", FILE_APPEND);
-            header("Location: /debats?error=notfound");
+            $viewData = [
+                'debat' => $debat,
+                'arguments' => $arguments
+            ];
+
+            $this->renderView('debat_detail.php', $viewData);
+
+        } catch (\Exception $e) {
+            echo "Une erreur est survenue : " . $e->getMessage();
             exit;
         }
-
-        $arguments = $this->debatModel->getArgumentsByDebat($id);
-
-        extract(compact('debat', 'arguments'));
-        require_once __DIR__ . '/../Views/Debat/debat_detail.php';
     }
 
-
-
+    /**
+     * Méthode pour rendre la vue avec les données
+     */
+    private function renderView(string $view, array $data): void
+    {
+        extract($data);
+        require_once __DIR__ . '/../Views/Debat/' . $view;
+    }
 }
