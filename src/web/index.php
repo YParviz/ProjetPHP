@@ -1,6 +1,7 @@
 <?php
 
 use Controllers\ArgumentController;
+use Controllers\UserController;
 use Symfony\Component\Dotenv\Dotenv;
 
 if(file_exists(__DIR__.'/../../vendor/autoload.php')){
@@ -35,9 +36,26 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
         ArgumentController::list($args['idDebate']);
     });
 
-    // $r->addRoute(["GET", "POST"], '/debate/{idDebate:\d}/arguments', function ($args) {
-    //     UserController::list($args['idDebate']);
-    // });
+    $r->addRoute(["GET", "POST"], '/login', function () {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email = $_POST['email'] ?? null;
+            $mdp = $_POST['mdp'] ?? null;
+
+            if ($email && $mdp) {
+                UserController::login($email, $mdp);
+            } else {
+                echo "Veuillez remplir tous les champs.";
+            }
+        } else {
+            require __DIR__ . '/../app/Views/User/login.php'; // Affichage du formulaire
+        }
+    });
+
+    // Ajout d'une route pour le profil
+    $r->get('/profile', function () {
+        // Vérifie si l'utilisateur est connecté et affiche son profil
+        UserController::showProfile();
+    });
 });
 
 
