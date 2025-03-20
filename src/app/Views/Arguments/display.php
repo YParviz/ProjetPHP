@@ -5,13 +5,11 @@ echo "<div class='argument'>";
 echo "<div class='argument".$argument->getNumCamp()."'>";
 echo "<p>".$argument->getText()."</p>";
 echo "<p class='center' id='numVoteArg".$argument->getId()."'>";
-echo "<button onclick='unvote(".$argument->getId().")'>";
 if(!in_array($argument->getId(), $votes)) {
-    echo "Voter"; //TODO : remplacer par une image
+    echo "<input type='image' src='../../image/arguments/vote.png' class='imageVote' onclick='vote(".$argument->getId().")'>";
 } else {
-    echo "Dévoter"; //TODO : remplacer par une image
+    echo "<input type='image' src='../../image/arguments/unvote.png' class='imageVote' onclick='unvote(".$argument->getId().")'>";
 }
-echo "</button>";
 echo "  ".$argument->getVoteNumber()." votes</p>";
 echo "</div>";
 echo "<div class='sousArgument'>";

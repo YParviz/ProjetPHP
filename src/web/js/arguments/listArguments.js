@@ -15,7 +15,7 @@ function vote(idArgument) {
             }
         }
     ).then(data => {
-        document.getElementById("numVoteArg" + idArgument).innerText = data + " votes"
+        document.getElementById("numVoteArg" + idArgument).innerText = "<input type='image' src='../../image/arguments/unvote.png' class='imageVote' onclick='unvote()'>" + data + " votes"
     })
         .catch(error => {
             alert("Un problème est survenu")
@@ -39,7 +39,7 @@ function unvote(idArgument) {
             }
         }
     ).then(data => {
-        document.getElementById("numVoteArg" + idArgument).innerText = data + " votes"
+        document.getElementById("numVoteArg" + idArgument).innerText = "<input type='image' src='../../image/arguments/vote.png' class='imageVote' onclick='vote()'>" + data + " votes"
     })
         .catch(error => {
             alert("Vous avez déjà voté pour cet argument")

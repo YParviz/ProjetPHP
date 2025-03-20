@@ -41,3 +41,10 @@
 .center {
     text-align: center;
 }
+
+.imageVote {
+    width: 19px;
+    height: 19px;
+    top: 3px;
+    position: relative;
+}
