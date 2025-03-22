@@ -40,12 +40,15 @@
 
 .center {
     text-align: center;
-    display: flex;
+}
+
+.divVote {
+    text-align: center;
 }
 
 .imageVote {
-    width: 19px;
-    height: 19px;
     top: 3px;
     position: relative;
+    width: 19px;
+    height: 19px;
 }

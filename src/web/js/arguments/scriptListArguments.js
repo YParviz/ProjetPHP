@@ -8,6 +8,7 @@ function vote(idArgument) {
             "idArgument": idArgument
         })
     }).then(response => {
+        console.log(response);
             if (response.ok){
                 return response.text()
             } else {
@@ -16,12 +17,10 @@ function vote(idArgument) {
         }
     ).then(data => {
         document.getElementById("imgVoteArg" + idArgument).setAttribute("src", "../../image/arguments/unvote.png");
-        document.getElementById("imgVoteArg" + idArgument).setAttribute("onclick", "unvote()");
-        document.getElementById("numVoteArgs").innerText = data + " votes";
+        document.getElementById("imgVoteArg" + idArgument).setAttribute("onclick", "unvote(" + idArgument + ")");
+        document.getElementById("imgVoteArg" + idArgument).setAttribute("id", "imgVoteArg" + idArgument);
+        document.getElementById("numVoteArg" + idArgument).innerText = data + " votes";
     })
-        .catch(error => {
-            alert("Un problème est survenu")
-        })
 }
 
 function unvote(idArgument) {
@@ -34,6 +33,7 @@ function unvote(idArgument) {
             "idArgument": idArgument
         })
     }).then(response => {
+        console.log(response);
             if (response.ok){
                 return response.text()
             } else {
@@ -42,11 +42,8 @@ function unvote(idArgument) {
         }
     ).then(data => {
         document.getElementById("imgVoteArg" + idArgument).setAttribute("src", "../../image/arguments/vote.png");
-        document.getElementById("imgVoteArg" + idArgument).setAttribute("onclick", "vote()");
-        document.getElementById("numVoteArgs").innerText = data + " votes";
+        document.getElementById("imgVoteArg" + idArgument).setAttribute("onclick", "vote(" + idArgument + ")");
+        document.getElementById("numVoteArg" + idArgument).innerText = data + " votes";
 
     })
-        .catch(error => {
-            alert("Vous avez déjà voté pour cet argument")
-        })
 }
