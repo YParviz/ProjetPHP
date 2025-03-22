@@ -57,6 +57,7 @@ CREATE TABLE Argument(
                          id_camp INT NOT NULL,
                          id_arg_principal INT,
                          id_utilisateur INT NOT NULL,
+                         vote_number INT NOT NULL DEFAULT 0,
                          PRIMARY KEY(id_arg),
                          FOREIGN KEY(id_camp) REFERENCES Camp(id_camp),
                          FOREIGN KEY(id_arg_principal) REFERENCES Argument(id_arg),
