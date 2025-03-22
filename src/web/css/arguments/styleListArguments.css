@@ -6,21 +6,49 @@
     margin-right: 40px;
 }
 
-.argument1 {
-    background-color: #A6B1E1;
-    border-radius: 22px;
-    padding: 1px;
-    margin-bottom: 10px;
+.argument {
+    margin-bottom: 20px;
 }
 
-.argument2 {
-    background-color: #FE5F55;
+.argument1, .argument2 {
     border-radius: 22px;
     padding: 1px;
-    margin-bottom: 10px;
+}
+.argument1 {
+    background-color: #A6B1E1;
+}
+.argument2 {
+    background-color: #FE5F55;
+}
+
+
+.sousArgument {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.sousArgument1, .sousArgument2 {
+    border-radius: 0 0 22px 22px;
+    padding: 1px;
+}
+.sousArgument1 {
+    background-color: #A6B1E1;
+}
+.sousArgument2 {
+    background-color: #FE5F55;
 }
 
 .center {
     text-align: center;
+}
 
+.divVote {
+    text-align: center;
+}
+
+.imageVote {
+    top: 3px;
+    position: relative;
+    width: 19px;
+    height: 19px;
 }
