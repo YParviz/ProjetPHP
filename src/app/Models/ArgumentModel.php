@@ -114,7 +114,7 @@ class ArgumentModel
         catch (Exception $e) {
             return false;
         }
-        $argument->setVoteNumber($argument->getVoteNumber()+1);
+        $argument->setVoteNumber($argument->getVoteNumber()-1);
         return $statement->rowCount() === 1;
     }
 

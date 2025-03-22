@@ -44,6 +44,5 @@ function unvote(idArgument) {
         document.getElementById("imgVoteArg" + idArgument).setAttribute("src", "../../image/arguments/vote.png");
         document.getElementById("imgVoteArg" + idArgument).setAttribute("onclick", "vote(" + idArgument + ")");
         document.getElementById("numVoteArg" + idArgument).innerText = data + " votes";
-
     })
 }
