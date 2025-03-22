@@ -11,7 +11,8 @@ class ArgumentModel
 {
     private $pdo;
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->pdo = Database::connect();
     }
 
@@ -41,7 +42,7 @@ class ArgumentModel
         $argumentsList = [[],[]];
         foreach ($arguments as $argument) {
             $argument["sous_arguments"] = $this->getAllSousArguments($argument["id_arg"]);
-            if ($argument["id_camp"] % 2 == 1){
+            if ($argument["id_camp"] % 2 == 1) {
                 $argumentsList[0][] = $this->createByTab($argument);
             } else {
                 $argumentsList[1][] = $this->createByTab($argument);
@@ -94,8 +95,7 @@ class ArgumentModel
                 "id_utilisateur" => 1,
                 "id_arg" => $argument->getId()
             ]);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
         $argument->setVoteNumber($argument->getVoteNumber()+1);
@@ -110,8 +110,7 @@ class ArgumentModel
                 "id_utilisateur" => 1,
                 "id_arg" => $argument->getId()
             ]);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
         $argument->setVoteNumber($argument->getVoteNumber()-1);

@@ -3,7 +3,7 @@
 use Controllers\ArgumentController;
 use Symfony\Component\Dotenv\Dotenv;
 
-if(file_exists(__DIR__.'/../../vendor/autoload.php')){
+if (file_exists(__DIR__.'/../../vendor/autoload.php')) {
     require __DIR__.'/../../vendor/autoload.php';
 } else {
     echo "<h1>Veuillez installer Composer</h1>";
@@ -18,9 +18,9 @@ $dotenv = new Dotenv();
 $dotenv->load(__DIR__.'/../../.env');
 
 
-$dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
+$dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
 
-    $r->get('/', function() {
+    $r->get('/', function () {
         echo 'Page d\'accueil';
     });
 

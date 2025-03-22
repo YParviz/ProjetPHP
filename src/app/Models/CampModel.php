@@ -8,11 +8,13 @@ use Util\Database;
 class CampModel
 {
     private $pdo;
-    public function __construct(){
+    public function __construct()
+    {
         $this->pdo = Database::connect();
     }
 
-    public function getCampsByDebat(int $idDebat) : array {
+    public function getCampsByDebat(int $idDebat) : array
+    {
         $statement = $this->pdo->prepare("SELECT * FROM Camp WHERE id_debat = :id_debat");
         $statement->execute(['id_debat' => $idDebat]);
         $camps = [];
@@ -22,7 +24,8 @@ class CampModel
         return $camps;
     }
 
-    private function createByTab(array $camp): Camp {
+    private function createByTab(array $camp): Camp
+    {
         return new Camp(
             $camp['id_camp'],
             $camp['nom_camp'],
