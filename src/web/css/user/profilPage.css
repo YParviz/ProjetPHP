@@ -1,0 +1,8 @@
+body::after {
+    content: "CSS CHARGÉ AVEC SUCCÈS";
+    display: block;
+    color: green;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}
