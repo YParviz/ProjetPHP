@@ -22,10 +22,16 @@ class UserModel
         return $statement->rowCount() === 1;
     }
 
-    public function getUserByEmail(string $email): User {
+    public function getUserByEmail(string $email): ?User {
         $statement = $this->pdo->prepare("SELECT * FROM Utilisateur WHERE email = :email");
         $statement->execute(['email' => $email]);
+    
         $user = $statement->fetch(PDO::FETCH_ASSOC);
+    
+        if (!$user) {
+            return null; // Utilisateur non trouvé
+        }
+    
         return $this->createByTab($user);
     }
 
@@ -81,6 +87,45 @@ class UserModel
         $stats['debates_won'] = $stmt->fetchColumn() ?: 0;
 
         return $stats;
+    }
+
+    public function updateUser(int $userId, string $pseudo, string $email, string $mdp): void
+    {
+        $stmt = $this->pdo->prepare("
+            UPDATE Utilisateur 
+            SET pseudo = :pseudo, email = :email, mdp = :mdp
+            WHERE id_utilisateur = :userId
+        ");
+        $stmt->execute([
+            'pseudo' => $pseudo,
+            'email' => $email,
+            'mdp' => $mdp,
+            'userId' => $userId
+        ]);
+    }
+
+    public function deleteUser(int $userId): void
+    {
+        // Transfert des données liées à l'utilisateur vers l'utilisateur "0"
+        $this->pdo->beginTransaction();
+
+        $this->pdo->prepare("
+            UPDATE Argument
+            SET id_utilisateur = 0
+            WHERE id_utilisateur = :userId
+        ")->execute(['userId' => $userId]);
+
+        $this->pdo->prepare("
+            UPDATE Debat
+            SET id_utilisateur = 0
+            WHERE id_utilisateur = :userId
+        ")->execute(['userId' => $userId]);
+
+        $this->pdo->prepare("
+            DELETE FROM Utilisateur WHERE id_utilisateur = :userId
+        ")->execute(['userId' => $userId]);
+
+        $this->pdo->commit();
     }
     
     

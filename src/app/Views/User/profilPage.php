@@ -11,10 +11,10 @@
             gap: 16px;
             padding: 20px;
             font-family: Arial, sans-serif;
-            height: 100vh; /* Prend toute la hauteur de l'écran */
-            width: 100vw;  /* Prend toute la largeur de l'écran */
-            margin: 0;     /* Supprime les marges par défaut du body */
-            box-sizing: border-box; /* Évite les débordements */
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
+            box-sizing: border-box;
         }
 
         .profile_info, .recent_debat, .statistique {
@@ -29,7 +29,7 @@
             margin-bottom: 16px;
         }
 
-        .profile_info p {
+        .profile_info p, .profile_info .editable {
             display: flex;
             flex-direction: column;
             margin-bottom: 8px;
@@ -55,10 +55,15 @@
 
         .button-modifier { background-color: #A2A9DC; }
         .button-supprimer { background-color: #F44336; }
+        .button-enregistrer { background-color: #4CAF50; }
 
         .button:hover {
             transform: scale(1.05);
             box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .hidden {
+            display: none;
         }
 
         .statistique p {
@@ -68,14 +73,14 @@
             margin: 4px 0;
         }
 
-        .div_stat{
+        .div_stat {
             display: grid;
             grid-template-rows: 1fr 1fr;
             gap: 16px;
         }
 
         .highlight {
-            background-color: #FFEE58; /* Jaune vif */
+            background-color: #FFEE58;
             font-weight: bold;
         }
 
@@ -91,18 +96,79 @@
 
     <div class="profile_info">
         <h2>Vos informations</h2>
-        <p><strong>Pseudo:</strong> <?php echo htmlspecialchars($pseudo); ?></p>
-        <p><strong>Adresse email:</strong> <?php echo htmlspecialchars($email); ?></p>
-        <p><strong>Mot de passe:</strong> <?php echo htmlspecialchars($mdp); ?></p>
-        <p><strong>Compte créé le :</strong> <?php echo htmlspecialchars($date_creation instanceof DateTime 
+
+        <!-- Champs non éditables par défaut -->
+        <div id="displayFields">
+            <p><strong>Pseudo :</strong> <?php echo htmlspecialchars($pseudo); ?></p>
+            <p><strong>Adresse email :</strong> <?php echo htmlspecialchars($email); ?></p>
+            <p><strong>Mot de passe :</strong> <?php echo htmlspecialchars($mdp);?> </p>
+        </div>
+
+        <!-- Formulaire de modification caché par défaut -->
+        <form method="POST" action="/updateProfile" id="editForm" class="hidden">
+            <div class="editable">
+                <label>Pseudo:</label>
+                <input type="text" name="pseudo" value="<?php echo htmlspecialchars($pseudo); ?>">
+            </div>
+
+            <div class="editable">
+                <label>Adresse email:</label>
+                <input type="email" name="email" value="<?php echo htmlspecialchars($email); ?>">
+            </div>
+
+            <div class="editable">
+                <label>Mot de passe:</label>
+                <input type="mdp" name="mdp" value="<?php echo htmlspecialchars($mdp); ?>">
+            </div>
+
+            <div class="bouton">
+                <button type="submit" class="button button-enregistrer">Enregistrer</button>
+            </div>
+        </form>
+
+        <p><strong>Compte créé le :</strong> 
+            <?php echo htmlspecialchars($date_creation instanceof DateTime 
             ? $date_creation->format('d/m/Y H:i:s') 
             : $date_creation); ?>
         </p>
+
         <div class="bouton">
-            <button class="button button-modifier">Modifier</button>
-            <button class="button button-supprimer">Supprimer</button>
+            <button type="button" class="button button-modifier" id="editButton" onclick="toggleEdit()">Modifier</button>
+            <button type="button" class="button button-supprimer" onclick="confirmDelete()">Supprimer</button>
         </div>
     </div>
+
+    <script>
+        // Fonction pour afficher les champs en mode édition
+        function toggleEdit() {
+            const displayFields = document.getElementById('displayFields');
+            const editForm = document.getElementById('editForm');
+            const editButton = document.getElementById('editButton');
+
+            // Bascule entre affichage des champs et des inputs
+            displayFields.classList.toggle('hidden');
+            editForm.classList.toggle('hidden');
+
+            // Change le bouton "Modifier" en "Annuler"
+            if (!editForm.classList.contains('hidden')) {
+                editButton.textContent = "Annuler";
+                editButton.classList.remove('button-modifier');
+                editButton.classList.add('button-supprimer');
+            } else {
+                editButton.textContent = "Modifier";
+                editButton.classList.remove('button-supprimer');
+                editButton.classList.add('button-modifier');
+            }
+        }
+
+        // Confirmation avant suppression du compte
+        function confirmDelete() {
+            const confirmation = confirm("Si vous acceptez la suppression, vous serez redirigé vers la page d'accueil.");
+            if (confirmation) {
+                window.location.href = "/deleteProfile";
+            }
+        }
+    </script>
 
     <div class="div_stat">
         <div class="recent_debat">

@@ -56,6 +56,14 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
         // Vérifie si l'utilisateur est connecté et affiche son profil
         UserController::showProfile();
     });
+
+    $r->post('/updateProfile', function () {
+        UserController::updateProfile();
+    });
+    
+    $r->get('/deleteProfile', function () {
+        UserController::deleteProfile();
+    });
 });
 
 
