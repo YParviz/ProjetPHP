@@ -14,6 +14,7 @@ suivante :<pre>composer dump</pre> </a></p>";
 //  Importation de la navbar
 require_once __DIR__ . '/../app/Views/navbar.php';
 
+use Controllers\ArgumentController;
 use Symfony\Component\Dotenv\Dotenv;
 use FastRoute\RouteCollector;
 use function FastRoute\simpleDispatcher;
