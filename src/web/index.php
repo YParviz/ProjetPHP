@@ -47,6 +47,10 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
         ArgumentController::create($args['idDebate']);
     });
 
+    $r->post('/debate/{idDebate:\d}/postArg', function ($args) {
+        ArgumentController::poste($args['idDebate']);
+    });
+
     $r->post('/vote', function () {
         ArgumentController::vote();
     });
@@ -92,16 +96,9 @@ switch ($routeInfo[0]) {
         break;
 
     case FastRoute\Dispatcher::FOUND:
-        [$class, $method] = explode('@', $routeInfo[1]);
+        $handler = $routeInfo[1];
         $vars = $routeInfo[2];
 
-        // On instancie le contrôleur et appele la méthode qui correspond grace au conteneur
-        $controllerInstance = $container->get($class);
-        if (method_exists($controllerInstance, $method)) {
-            call_user_func_array([$controllerInstance, $method], $vars);
-        } else {
-            http_response_code(500);
-            echo "Méthode '$method' introuvable dans le contrôleur '$class'.";
-        }
+        print $handler($vars);
         break;
 }

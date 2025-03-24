@@ -1,8 +1,9 @@
 <?php namespace Util;
 
-class View {
+class View
+{
 
-    public function render($path, $data = false)
+    public function render($path, $data = false): void
     {
         if ($data) {
             foreach ($data as $key => $value) {
