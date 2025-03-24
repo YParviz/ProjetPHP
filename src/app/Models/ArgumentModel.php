@@ -80,6 +80,17 @@ class ArgumentModel
         ]);
         return $statement->rowCount() === 1;
     }
+
+    public function createNew(int $idCamp, string $text, int $idUser): bool
+    {
+        $statement = $this->pdo->prepare("INSERT INTO Argument (texte, id_camp, id_utilisateur) VALUES (:texte, :id_camp, :id_utilisateur)");
+        $statement->execute([
+            "texte" => $text,
+            "id_camp" => $idCamp,
+            "id_utilisateur" => $idUser
+        ]);
+        return $statement->rowCount() === 1;
+    }
     public function delete(Argument $argument): bool
     {
         $statement = $this->pdo->prepare("DELETE FROM Argument WHERE id_arg = :id");

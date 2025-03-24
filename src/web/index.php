@@ -45,6 +45,10 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
         ArgumentController::create($args['idDebate']);
     });
 
+    $r->post('/debate/{idDebate:\d}/postArg', function ($args) {
+        ArgumentController::poste($args['idDebate']);
+    });
+
     $r->post('/vote', function () {
         ArgumentController::vote();
     });
