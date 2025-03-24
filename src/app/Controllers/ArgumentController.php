@@ -26,6 +26,14 @@ class ArgumentController
         $view->render("Arguments/list", ["camp1" => $camps[0], "camp2" => $camps[1], "idDebat" => $idDebat, "arguments" => $arguments, "votes" => $votes]);
     }
 
+    public static function create(int $idDebate): void
+    {
+        $campModel = new CampModel();
+        $camps = $campModel->getCampsByDebat($idDebate);
+        $view = new View();
+        $view->render("Arguments/create", ["camps" => $camps]);
+    }
+
     public static function vote(): void
     {
 
