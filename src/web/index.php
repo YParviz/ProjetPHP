@@ -11,8 +11,6 @@ suivante :<pre>composer dump</pre> </a></p>";
     exit;
 }
 
-//  Importation de la navbar
-require_once __DIR__ . '/../app/Views/navbar.php';
 
 use Controllers\ArgumentController;
 use Symfony\Component\Dotenv\Dotenv;
@@ -72,8 +70,6 @@ if (empty($uri)) {
     $uri = '/';
 }
 
-// ça affiche la navbar
-renderNavbar();
 
 // On dispatch la requête avec FastRoute
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
@@ -92,16 +88,9 @@ switch ($routeInfo[0]) {
         break;
 
     case FastRoute\Dispatcher::FOUND:
-        [$class, $method] = explode('@', $routeInfo[1]);
+        $handler = $routeInfo[1];
         $vars = $routeInfo[2];
 
-        // On instancie le contrôleur et appele la méthode qui correspond grace au conteneur
-        $controllerInstance = $container->get($class);
-        if (method_exists($controllerInstance, $method)) {
-            call_user_func_array([$controllerInstance, $method], $vars);
-        } else {
-            http_response_code(500);
-            echo "Méthode '$method' introuvable dans le contrôleur '$class'.";
-        }
+        print $handler($vars);
         break;
 }

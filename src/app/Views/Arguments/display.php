@@ -1,3 +1,14 @@
+<div class="argument">
+    <div class="argument<?= $argument->getNumCamp() ?>">
+        <p><?= $argument->getText() ?></p>
+        <div class="divVote">
+
+        </div>
+    </div>
+</div>
+
+
+
 <?php
 /* Fichier pour afficher un argument et tout ses sous arguments */
 

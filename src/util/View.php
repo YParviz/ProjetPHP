@@ -10,12 +10,14 @@ class View {
             }
         }
 
-        $filepath = "../app/views/$path.php";
+        $filepath = __DIR__."/../app/Views/$path.php";
+        require __DIR__."/../app/Views/navbar.php";
+        renderNavbar();
 
         if (file_exists($filepath)) {
             require $filepath;
         } else {
-            die("View: $path not found!");
+            die("View: $filepath not found!");
         }
 
     }
