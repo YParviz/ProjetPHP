@@ -2,41 +2,27 @@
     <div class="argument<?= $argument->getNumCamp() ?>">
         <p><?= $argument->getText() ?></p>
         <div class="divVote">
-
+            <?php if (!in_array($argument->getId(), $votes)): ?>
+                <input type="image" src="../../image/arguments/vote.png" alt="Bouton de vote" class="imageVote" id="imgVoteArg<?= $argument->getId()?>" onclick="vote(<?= $argument->getId() ?>)">
+            <?php else: ?>
+                <input type="image" src="../../image/arguments/unvote.png" alt="Bouton de vote" class="imageVote" id="imgVoteArg<?= $argument->getId()?>" onclick="unvote(<?= $argument->getId() ?>)">
+            <?php endif; ?>
+            <p id="numVoteArg<?= $argument->getId() ?>"><?= $argument->getVoteNumber() ?> votes</p>
         </div>
     </div>
+    <div class="sousArgument">
+        <?php foreach($argument->getSousArguments() as $sousArgument): ?>
+            <div class="sousArgument<?= $sousArgument->getNumCamp() ?>">
+                <p><?= $sousArgument->getText() ?></p>
+                <div class="divVote">
+                    <?php if (!in_array($sousArgument->getId(), $votes)): ?>
+                        <input type="image" src="../../image/arguments/vote.png" alt="Bouton de vote" class="imageVote" id="imgVoteArg<?= $argument->getId()?>" onclick="vote(<?= $argument->getId() ?>)">
+                    <?php else: ?>
+                        <input type="image" src="../../image/argumets/unvote.png" alt="Bouton de vote" class="imageVote" id="imgVoteArg<?= $argument->getId()?>" onclick="unvote(<?= $argument->getId() ?>)">
+                    <?php endif; ?>
+                    <p id="numVoteArg<?= $argument->getId() ?>"><?= $argument->getVoteNumber() ?> votes</p>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
 </div>
-
-
-
-<?php
-/* Fichier pour afficher un argument et tout ses sous arguments */
-
-echo "<div class='argument'>";
-echo "<div class='argument".$argument->getNumCamp()."'>";
-echo "<p>".$argument->getText()."</p>";
-echo "<div class='divVote'>";
-if (!in_array($argument->getId(), $votes)) {
-    echo "<input type='image' src='../../image/arguments/vote.png' class='imageVote' onclick='vote(".$argument->getId().")' id='imgVoteArg".$argument->getId()."' class='center'>";
-} else {
-    echo "<input type='image' src='../../image/arguments/unvote.png' class='imageVote' onclick='unvote(".$argument->getId().")' id='imgVoteArg".$argument->getId()."' class='center'>";
-}
-echo "<p id='numVoteArg".$argument->getId()."'>".$argument->getVoteNumber()." votes</p>";
-echo "</div>";
-echo "</div>";
-echo "<div class='sousArgument'>";
-foreach ($argument->getSousArguments() as $sousArgument) {
-    echo "<div class='sousArgument".$sousArgument->getNumCamp()."'>";
-    echo "<p>".$sousArgument->getText()."</p>";
-    echo "<div class='divVote'>";
-    if (!in_array($sousArgument->getId(), $votes)) {
-        echo "<input type='image' src='../../image/arguments/vote.png' class='imageVote' onclick='vote(".$sousArgument->getId().")' id='imgVoteArg".$sousArgument->getId()."'>";
-    } else {
-        echo "<input type='image' src='../../image/arguments/unvote.png' class='imageVote' onclick='unvote(".$sousArgument->getId().")' id='imgVoteArg".$sousArgument->getId()."'>";
-    }
-    echo "<p id='numVoteArg".$sousArgument->getId()."'>".$sousArgument->getVoteNumber()." votes</p>";
-    echo "</div>";
-    echo "</div>";
-}
-echo "</div>";
-echo "</div>";

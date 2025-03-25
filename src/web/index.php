@@ -27,7 +27,12 @@ $container = require_once __DIR__ . '/../Container/container.php';
 
 // Initialisation de FastRoute
 $dispatcher = simpleDispatcher(function (RouteCollector $r) {
-    $r->get('/', 'Controllers\DebatController@listDebats'); // page d'accueil
+    $r->get('/', function () {
+        $amodel = new \Models\ArgumentModel();
+        $argument = $amodel->getById(1);
+        $acontroller = new ArgumentController;
+        $acontroller->print($argument);
+    }); // page d'accueil
     $r->get('/debats[/{page:\d+}]', 'Controllers\DebatController@listDebats'); // liste des débats avec pagination
     $r->get('/debat/{id:\d+}', 'Controllers\DebatController@viewDebat'); // page d'un débat spécifique
     $r->addRoute(["GET", "POST"], '/argument/{id:\d}', function ($args) {
