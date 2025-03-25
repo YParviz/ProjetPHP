@@ -6,7 +6,8 @@ use PDO;
 
 class Database
 {
-    public static function connect(): PDO
+    private static PDO $PDO;
+    private static function connect(): void
     {
         $host = $_ENV['DB_HOST'];
         $name = $_ENV['DB_NAME'];
@@ -14,7 +15,14 @@ class Database
         $pass = $_ENV['DB_PASSWORD'];
         $port = $_ENV['DB_PORT'];
         $charset = $_ENV['DB_CHARSET'];
-        $pdo = new PDO("mysql:host=$host;port=$port;dbname=$name;charset=$charset", $user, $pass);
-        return $pdo;
+        Database::$PDO = new PDO("mysql:host=$host;port=$port;dbname=$name;charset=$charset", $user, $pass);
+    }
+
+    public static function getPDO(): PDO
+    {
+        if (!isset(Database::$PDO)) {
+            self::connect();
+        }
+        return Database::$PDO;
     }
 }

@@ -13,7 +13,7 @@ class ArgumentModel
 
     public function __construct()
     {
-        $this->pdo = Database::connect();
+        $this->pdo = Database::getPDO();
     }
 
     public function getById(int $id): Argument
