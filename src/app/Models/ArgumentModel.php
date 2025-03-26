@@ -107,7 +107,7 @@ class ArgumentModel
         try {
             $statement = $this->pdo->prepare("INSERT INTO Voter (id_utilisateur, id_arg) VALUE (:id_utilisateur, :id_arg)");
             $statement->execute([
-                "id_utilisateur" => 1,
+                "id_utilisateur" => $_SESSION['user']['id'],
                 "id_arg" => $argument->getId()
             ]);
         } catch (Exception $e) {
@@ -122,7 +122,7 @@ class ArgumentModel
         try {
             $statement = $this->pdo->prepare("DELETE FROM Voter WHERE id_arg = :id_arg AND id_utilisateur = :id_utilisateur");
             $statement->execute([
-                "id_utilisateur" => 1,
+                "id_utilisateur" => $_SESSION['user']['id'],
                 "id_arg" => $argument->getId()
             ]);
         } catch (Exception $e) {
@@ -159,5 +159,4 @@ class ArgumentModel
             $sousArguments
         );
     }
-
 }

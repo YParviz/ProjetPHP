@@ -23,6 +23,8 @@ use Controllers\DebatController;
 $dotenv = new Dotenv();
 $dotenv->load(__DIR__ . '/../../.env');
 
+session_start();
+
 // Création du conteneur d'injection de dépendances
 $container = require_once __DIR__ . '/../Container/container.php';
 
@@ -36,16 +38,32 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
         ArgumentController::list($args['idDebate']);
     });
     $r->get('/debate/{idDebate:\d}/poste', function ($args) {
-        ArgumentController::create($args['idDebate']);
+        if(isset($_SESSION['user'])) {
+            ArgumentController::create($args['idDebate']);
+        } else {
+            header("Location: /login");
+        }
     });
     $r->post('/debate/{idDebate:\d}/postArg', function ($args) {
-        ArgumentController::poste($args['idDebate']);
+        if(isset($_SESSION['user'])) {
+            ArgumentController::poste($args['idDebate']);
+        } else {
+            header("Location: /login");
+        }
     });
     $r->post('/vote', function () {
-        ArgumentController::vote();
+        if(isset($_SESSION['user'])) {
+            ArgumentController::vote();
+        } else {
+            header($_SERVER["SERVER_PROTOCOL"] . " 500 Internal Server Error");
+        }
     });
     $r->post('/unvote', function () {
-        ArgumentController::unvote();
+        if(isset($_SESSION['user'])) {
+            ArgumentController::unvote();
+        } else {
+            header($_SERVER["SERVER_PROTOCOL"] . " 500 Internal Server Error");
+        }
     });
 });
 
