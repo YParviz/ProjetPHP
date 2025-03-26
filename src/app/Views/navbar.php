@@ -17,9 +17,9 @@ function renderNavbar(): void
             </button>
         </div>
         <div class="navbar__actions">
-            <button class="create-debate">
-                Créer un débat
-            </button>
+            <a href="/profile" class="login-button">
+                <img src="/image/profil.svg">
+            </a>
             <div class="user-icon">
                 <a href="/profil">
                     <i class="fas fa-user-circle"></i>

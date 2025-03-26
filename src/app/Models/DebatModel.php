@@ -182,33 +182,6 @@ class DebatModel
         );
     }
 
-    public function getArgumentsByDebat(int $id): array
-    {
-        $stmt = $this->db->prepare("
-        SELECT a.id_arg, a.texte, a.id_camp, a.id_arg_principal, a.id_utilisateur, a.date_poste, a.vote_number
-        FROM Argument a
-        JOIN Camp c ON a.id_camp = c.id_camp
-        WHERE c.id_debat = :id
-    ");
-        $stmt->execute(['id' => $id]);
-
-        $arguments = [];
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $arguments[] = new Argument(
-                (int) $row['id_arg'],  // ID de l'argument
-                (string) $row['texte'], // Texte de l'argument
-                (int) $row['id_camp'], // ID du camp
-                isset($row['id_arg_principal']) ? (int) $row['id_arg_principal'] : null, // ID de l'argument principal, ou null
-                (int) $row['id_utilisateur'], // ID de l'utilisateur
-                (string) $row['date_poste'], // Date de publication
-                (int) $row['vote_number'] // Nombre de votes
-            );
-        }
-
-        return $arguments;
-    }
-
-
     public function getAllDebatsSortedByDate(int $limit, int $offset): array
     {
         // Préparation de la requête pour récupérer les débats valides, triés par date de création (du plus récent au plus ancien)
