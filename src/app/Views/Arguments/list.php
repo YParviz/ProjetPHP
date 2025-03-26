@@ -7,7 +7,7 @@
 </head>
 <body>
     <br>
-    <a href="/debate/<?= $idDebat?>/poste">
+    <a href="/debate/<?= $debat->getId()?>/poste">
         <button>Poster un nouvel argument</button>
     </a>
     <div class="arguments">

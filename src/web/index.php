@@ -31,13 +31,22 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
         global $container;
         $debatController = $container->get("Controllers\DebatController");
         $debatController->listDebats();
-    }); // page d'accueil
-    $r->get('/debats[/{page:\d+}]', 'Controllers\DebatController@listDebats'); // liste des débats avec pagination
-    $r->get('/debat/{id:\d+}', 'Controllers\DebatController@viewDebat'); // page d'un débat spécifique
+    });
+    $r->get('/debats[/{page:\d+}]', function($args) {
+        global $container;
+        $debatController = $container->get("Controllers\DebatController");
+        $debatController->listDebats($args['page']);
+    });
+    $r->get('/debat/{id:\d+}', function($args) {
+        global $container;
+        $debatController = $container->get("Controllers\DebatController");
+        $debatController->viewDebat($args['id']);
+    });
 
     $r->addRoute(["GET", "POST"], '/debate/{idDebate:\d}/arguments', function ($args) {
         ArgumentController::list($args['idDebate']);
     });
+
     $r->get('/debate/{idDebate:\d}/poste', function ($args) {
         if(isset($_SESSION['user'])) {
             ArgumentController::create($args['idDebate']);

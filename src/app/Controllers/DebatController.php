@@ -1,9 +1,12 @@
 <?php
 namespace Controllers;
 
+use Models\ArgumentModel;
+use Models\CampModel;
 use Models\DebatModel;
 use Models\UserStatModel;
 use PDO;
+use Util\View;
 
 class DebatController
 {
@@ -47,11 +50,18 @@ class DebatController
         // Récupération du classement des utilisateurs
         $userRanking = $this->userStatModel->getUserRankingByVotes(5);
 
-        // Envoi des variables à la vue
-        extract(compact('debatsRecents', 'debatsTendance', 'statsRecents', 'statsTendance', 'perPage', 'page', 'noMoreDebatsNextPage', 'userRanking'));
-        require_once __DIR__ . '/../Views/Debat/debats_list.php';
+        $view = new View();
+        $view->render("Debat/debats_list", [
+            "debatsRecents" => $debatsRecents,
+            "debatsTendance" => $debatsTendance,
+            "statsRecents" => $statsRecents,
+            "statsTendance" => $statsTendance,
+            "perPage" => $perPage,
+            "page" => $page,
+            "noMoreDebatsNextPage" => $noMoreDebatsNextPage,
+            "userRanking" => $userRanking
+        ]);
     }
-
 
     private function getDebatStats(array $debats): array
     {
@@ -74,27 +84,29 @@ class DebatController
                 exit;
             }
 
-            $arguments = $this->debatModel->getArgumentsByDebat($id);
+            if(isset($_SESSION['user']['id'])) {
+                $userId = $_SESSION['user']['id'];
+            } else {
+                $userId = 0;
+            }
+            $argumentModel = new ArgumentModel();
+            $arguments = $argumentModel->getByDebat($id);
+            $votes = $argumentModel->getArgumentVoted($userId);
+            $camp = new CampModel();
+            $camps = $camp->getCampsByDebat($id);
 
-            $viewData = [
-                'debat' => $debat,
-                'arguments' => $arguments
-            ];
-
-            $this->renderView('debat_detail.php', $viewData);
+            $view = new View();
+            $view->render("Debat/debat_detail", [
+                "debat" => $debat,
+                "arguments" => $arguments,
+                "camp1" => $camps[0],
+                "camp2" => $camps[1],
+                "votes" => $votes
+            ]);
 
         } catch (\Exception $e) {
             echo "Une erreur est survenue : " . $e->getMessage();
             exit;
         }
-    }
-
-    /**
-     * Méthode pour rendre la vue avec les données
-     */
-    private function renderView(string $view, array $data): void
-    {
-        extract($data);
-        require_once __DIR__ . '/../Views/Debat/' . $view;
     }
 }
