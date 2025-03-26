@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DebatArena - Profil Utilisateur</title>
     <style>
-        body {
+        .page {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
@@ -93,104 +93,105 @@
     </style>
 </head>
 <body>
+    <div class="page">
+        <div class="profile_info">
+            <h2>Vos informations</h2>
 
-    <div class="profile_info">
-        <h2>Vos informations</h2>
-
-        <!-- Champs non éditables par défaut -->
-        <div id="displayFields">
-            <p><strong>Pseudo :</strong> <?php echo htmlspecialchars($pseudo); ?></p>
-            <p><strong>Adresse email :</strong> <?php echo htmlspecialchars($email); ?></p>
-            <p><strong>Mot de passe :</strong> <?php echo htmlspecialchars($mdp);?> </p>
-        </div>
-
-        <!-- Formulaire de modification caché par défaut -->
-        <form method="POST" action="/updateProfile" id="editForm" class="hidden">
-            <div class="editable">
-                <label>Pseudo:</label>
-                <input type="text" name="pseudo" value="<?php echo htmlspecialchars($pseudo); ?>">
+            <!-- Champs non éditables par défaut -->
+            <div id="displayFields">
+                <p><strong>Pseudo :</strong> <?php echo htmlspecialchars($pseudo); ?></p>
+                <p><strong>Adresse email :</strong> <?php echo htmlspecialchars($email); ?></p>
+                <p><strong>Mot de passe :</strong> <?php echo htmlspecialchars($mdp);?> </p>
             </div>
 
-            <div class="editable">
-                <label>Adresse email:</label>
-                <input type="email" name="email" value="<?php echo htmlspecialchars($email); ?>">
-            </div>
+            <!-- Formulaire de modification caché par défaut -->
+            <form method="POST" action="/updateProfile" id="editForm" class="hidden">
+                <div class="editable">
+                    <label>Pseudo:</label>
+                    <input type="text" name="pseudo" value="<?php echo htmlspecialchars($pseudo); ?>">
+                </div>
 
-            <div class="editable">
-                <label>Mot de passe:</label>
-                <input type="mdp" name="mdp" value="<?php echo htmlspecialchars($mdp); ?>">
-            </div>
+                <div class="editable">
+                    <label>Adresse email:</label>
+                    <input type="email" name="email" value="<?php echo htmlspecialchars($email); ?>">
+                </div>
+
+                <div class="editable">
+                    <label>Mot de passe:</label>
+                    <input type="mdp" name="mdp" value="<?php echo htmlspecialchars($mdp); ?>">
+                </div>
+
+                <div class="bouton">
+                    <button type="submit" class="button button-enregistrer">Enregistrer</button>
+                </div>
+            </form>
+
+            <p><strong>Compte créé le :</strong>
+                <?php echo htmlspecialchars($date_creation instanceof DateTime
+                ? $date_creation->format('d/m/Y H:i:s')
+                : $date_creation); ?>
+            </p>
 
             <div class="bouton">
-                <button type="submit" class="button button-enregistrer">Enregistrer</button>
+                <button type="button" class="button button-modifier" id="editButton" onclick="toggleEdit()">Modifier</button>
+                <button type="button" class="button button-supprimer" onclick="confirmDelete()">Supprimer</button>
             </div>
-        </form>
-
-        <p><strong>Compte créé le :</strong> 
-            <?php echo htmlspecialchars($date_creation instanceof DateTime 
-            ? $date_creation->format('d/m/Y H:i:s') 
-            : $date_creation); ?>
-        </p>
-
-        <div class="bouton">
-            <button type="button" class="button button-modifier" id="editButton" onclick="toggleEdit()">Modifier</button>
-            <button type="button" class="button button-supprimer" onclick="confirmDelete()">Supprimer</button>
-        </div>
-    </div>
-
-    <script>
-        // Fonction pour afficher les champs en mode édition
-        function toggleEdit() {
-            const displayFields = document.getElementById('displayFields');
-            const editForm = document.getElementById('editForm');
-            const editButton = document.getElementById('editButton');
-
-            // Bascule entre affichage des champs et des inputs
-            displayFields.classList.toggle('hidden');
-            editForm.classList.toggle('hidden');
-
-            // Change le bouton "Modifier" en "Annuler"
-            if (!editForm.classList.contains('hidden')) {
-                editButton.textContent = "Annuler";
-                editButton.classList.remove('button-modifier');
-                editButton.classList.add('button-supprimer');
-            } else {
-                editButton.textContent = "Modifier";
-                editButton.classList.remove('button-supprimer');
-                editButton.classList.add('button-modifier');
-            }
-        }
-
-        // Confirmation avant suppression du compte
-        function confirmDelete() {
-            const confirmation = confirm("Si vous acceptez la suppression, vous serez redirigé vers la page d'accueil.");
-            if (confirmation) {
-                window.location.href = "/deleteProfile";
-            }
-        }
-    </script>
-
-    <div class="div_stat">
-        <div class="recent_debat">
-            <h2>Récemment débattu</h2>
-            <?php foreach ($debates as $debate): ?>
-            <div class="debat">
-                <h3><?php echo htmlspecialchars($debate->getName()); ?></h3>
-                <p>Nombre de participants : <?php echo $debate->getNbParticipants(); ?></p>
-            </div>
-            <?php endforeach; ?>
         </div>
 
-        <div class="statistique">
-            <h2>Statistiques</h2>
-            <?php if (isset($stats)) : ?>
-                <p><strong>Nombre total de votes accumulés :</strong> <?php echo $stats['total_votes'] ?? 0; ?></p>
-                <p><strong>Débat remporté :</strong> <?php echo $stats['debates_won'] ?? 0; ?> Victoires</p>
-                <p class="highlight">Classement mois en cours : <?php echo $stats['rank_month'] ?? 'Non classé'; ?></p>
-                <p><strong>Classement global :</strong> <?php echo $stats['rank_global'] ?? 'Non classé'; ?></p>
-            <?php else : ?>
-                <p>Aucune statistique disponible pour cet utilisateur.</p>
-            <?php endif; ?>
+        <script>
+            // Fonction pour afficher les champs en mode édition
+            function toggleEdit() {
+                const displayFields = document.getElementById('displayFields');
+                const editForm = document.getElementById('editForm');
+                const editButton = document.getElementById('editButton');
+
+                // Bascule entre affichage des champs et des inputs
+                displayFields.classList.toggle('hidden');
+                editForm.classList.toggle('hidden');
+
+                // Change le bouton "Modifier" en "Annuler"
+                if (!editForm.classList.contains('hidden')) {
+                    editButton.textContent = "Annuler";
+                    editButton.classList.remove('button-modifier');
+                    editButton.classList.add('button-supprimer');
+                } else {
+                    editButton.textContent = "Modifier";
+                    editButton.classList.remove('button-supprimer');
+                    editButton.classList.add('button-modifier');
+                }
+            }
+
+            // Confirmation avant suppression du compte
+            function confirmDelete() {
+                const confirmation = confirm("Si vous acceptez la suppression, vous serez redirigé vers la page d'accueil.");
+                if (confirmation) {
+                    window.location.href = "/deleteProfile";
+                }
+            }
+        </script>
+
+        <div class="div_stat">
+            <div class="recent_debat">
+                <h2>Récemment débattu</h2>
+                <?php foreach ($debates as $debate): ?>
+                <div class="debat">
+                    <h3><?php echo htmlspecialchars($debate->getName()); ?></h3>
+                    <p>Nombre de participants : <?php echo $debate->getNbParticipants(); ?></p>
+                </div>
+                <?php endforeach; ?>
+            </div>
+
+            <div class="statistique">
+                <h2>Statistiques</h2>
+                <?php if (isset($stats)) : ?>
+                    <p><strong>Nombre total de votes accumulés :</strong> <?php echo $stats['total_votes'] ?? 0; ?></p>
+                    <p><strong>Débat remporté :</strong> <?php echo $stats['debates_won'] ?? 0; ?> Victoires</p>
+                    <p class="highlight">Classement mois en cours : <?php echo $stats['rank_month'] ?? 'Non classé'; ?></p>
+                    <p><strong>Classement global :</strong> <?php echo $stats['rank_global'] ?? 'Non classé'; ?></p>
+                <?php else : ?>
+                    <p>Aucune statistique disponible pour cet utilisateur.</p>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 </body>
