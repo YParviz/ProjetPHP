@@ -17,9 +17,14 @@ class ArgumentController
 
     public static function list(int $idDebat): void
     {
+        if(isset($_SESSION['user']['id'])) {
+            $userId = $_SESSION['user']['id'];
+        } else {
+            $userId = 0;
+        }
         $argumentModel = new ArgumentModel();
         $arguments = $argumentModel->getByDebat($idDebat);
-        $votes = $argumentModel->getArgumentVoted(1);
+        $votes = $argumentModel->getArgumentVoted($userId);
         $camp = new CampModel();
         $camps = $camp->getCampsByDebat($idDebat);
         $view = new View();
