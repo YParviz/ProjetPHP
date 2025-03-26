@@ -175,7 +175,7 @@
             <h2>Récemment débattu</h2>
             <?php foreach ($debates as $debate): ?>
             <div class="debat">
-                <h3><?php echo htmlspecialchars($debate->getNomD()); ?></h3>
+                <h3><?php echo htmlspecialchars($debate->getName()); ?></h3>
                 <p>Nombre de participants : <?php echo $debate->getNbParticipants(); ?></p>
             </div>
             <?php endforeach; ?>
