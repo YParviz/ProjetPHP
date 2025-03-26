@@ -1,5 +1,10 @@
 <?php
 
+use Controllers\ArgumentController;
+use Controllers\DebatController;
+use Symfony\Component\Dotenv\Dotenv;
+use FastRoute\RouteCollector;
+use function FastRoute\simpleDispatcher;
 
 if (file_exists(__DIR__.'/../../vendor/autoload.php')) {
     require __DIR__.'/../../vendor/autoload.php';
@@ -13,11 +18,6 @@ suivante :<pre>composer dump</pre> </a></p>";
 
 //  Importation de la navbar
 require_once __DIR__ . '/../app/Views/navbar.php';
-
-use Symfony\Component\Dotenv\Dotenv;
-use FastRoute\RouteCollector;
-use function FastRoute\simpleDispatcher;
-use Controllers\DebatController;
 
 
 $dotenv = new Dotenv();
@@ -47,6 +47,35 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
     });
     $r->post('/unvote', function () {
         ArgumentController::unvote();
+    });
+
+    $r->addRoute(["GET", "POST"], '/login', function () {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email = $_POST['email'] ?? null;
+            $mdp = $_POST['mdp'] ?? null;
+
+            if ($email && $mdp) {
+                UserController::login($email, $mdp);
+            } else {
+                echo "Veuillez remplir tous les champs.";
+            }
+        } else {
+            require __DIR__ . '/../app/Views/User/login.php'; // Affichage du formulaire
+        }
+    });
+
+    // Ajout d'une route pour le profil
+    $r->get('/profile', function () {
+        // Vérifie si l'utilisateur est connecté et affiche son profil
+        UserController::showProfile();
+    });
+
+    $r->post('/updateProfile', function () {
+        UserController::updateProfile();
+    });
+    
+    $r->get('/deleteProfile', function () {
+        UserController::deleteProfile();
     });
 });
 

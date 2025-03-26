@@ -10,7 +10,7 @@ class View {
             }
         }
 
-        $filepath = "../app/views/$path.php";
+        $filepath = "../app/Views/$path.php"; // Chemin relatif pour 'views'
 
         if (file_exists($filepath)) {
             require $filepath;

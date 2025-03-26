@@ -1,0 +1,10 @@
+body{
+    width: 100%;
+    
+}
+
+.card{
+    display: flex;
+    justify-content: center;
+    color: aqua;
+}

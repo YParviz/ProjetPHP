@@ -1,87 +1,99 @@
 <?php
 
 namespace Entity;
+
 use DateTime;
 
 class Debate {
-    private int $id;
-    private string $name;
-    private string $description;
-    private string $status;
-    private int $duration;
-    private DateTime $creationDate;
-    private int $userId;
+    private int $id_debat;        // Correspond à 'id_debat'
+    private string $nom_d;        // Correspond à 'nom_d'
+    private string $desc_d;       // Correspond à 'desc_d'
+    private string $statut;       // Correspond à 'statut'
+    private int $duree;           // Correspond à 'duree'
+    private DateTime $date_creation; // Correspond à 'date_creation'
+    private int $id_utilisateur;  // Correspond à 'id_utilisateur'
+    private int $nb_participants; // Ajout du nombre de participants
 
-    // Constructor
+    // Constructeur
     public function __construct(
-        int $id,
-        string $name,
-        string $description,
-        string $status,
-        int $duration,
-        DateTime $creationDate,
-        int $userId
+        int $id_debat,
+        string $nom_d,
+        string $desc_d,
+        string $statut,
+        int $duree,
+        DateTime $date_creation,
+        int $id_utilisateur,
+        int $nb_participants = 0 
     ) {
-        $this->id = $id;
-        $this->name = $name;
-        $this->description = $description;
-        $this->status = $status;
-        $this->duration = $duration;
-        $this->creationDate = $creationDate;
-        $this->userId = $userId;
+        $this->id_debat = $id_debat;
+        $this->nom_d = $nom_d;
+        $this->desc_d = $desc_d;
+        $this->statut = $statut;
+        $this->duree = $duree;
+        $this->date_creation = $date_creation;
+        $this->id_utilisateur = $id_utilisateur;
+        $this->nb_participants = $nb_participants; 
     }
 
     // Getters
-    public function getId(): int {
-        return $this->id;
+    public function getIdDebat(): int {
+        return $this->id_debat;
     }
 
-    public function getName(): string {
-        return $this->name;
+    public function getNomD(): string {
+        return $this->nom_d;
     }
 
-    public function getDescription(): string {
-        return $this->description;
+    public function getDescD(): string {
+        return $this->desc_d;
     }
 
-    public function getStatus(): string {
-        return $this->status;
+    public function getStatut(): string {
+        return $this->statut;
     }
 
-    public function getDuration(): int {
-        return $this->duration;
+    public function getDuree(): int {
+        return $this->duree;
     }
 
-    public function getCreationDate(): DateTime {
-        return $this->creationDate;
+    public function getDateCreation(): DateTime {
+        return $this->date_creation;
     }
 
-    public function getUserId(): int {
-        return $this->userId;
+    public function getIdUtilisateur(): int {
+        return $this->id_utilisateur;
+    }
+
+    public function getNbParticipants(): int {
+        return $this->nb_participants;
     }
 
     // Setters
-    public function setName(string $name): void {
-        $this->name = $name;
+    public function setNomD(string $nom_d): void {
+        $this->nom_d = $nom_d;
     }
 
-    public function setDescription(string $description): void {
-        $this->description = $description;
+    public function setDescD(string $desc_d): void {
+        $this->desc_d = $desc_d;
     }
 
-    public function setStatus(string $status): void {
-        $this->status = $status;
+    public function setStatut(string $statut): void {
+        $this->statut = $statut;
     }
 
-    public function setDuration(int $duration): void {
-        $this->duration = $duration;
+    public function setDuree(int $duree): void {
+        $this->duree = $duree;
     }
 
-    public function setCreationDate(DateTime $creationDate): void {
-        $this->creationDate = $creationDate;
+    public function setDateCreation(DateTime $date_creation): void {
+        $this->date_creation = $date_creation;
     }
 
-    public function setUserId(int $userId): void {
-        $this->userId = $userId;
+    public function setIdUtilisateur(int $id_utilisateur): void {
+        $this->id_utilisateur = $id_utilisateur;
+    }
+
+    public function setNbParticipants(int $nb_participants): void {
+        $this->nb_participants = $nb_participants;
     }
 }
