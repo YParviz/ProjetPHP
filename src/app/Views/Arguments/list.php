@@ -6,6 +6,10 @@
     <title>Débat</title>
 </head>
 <body>
+    <br>
+    <a href="/debate/<?= $idDebat?>/poste">
+        <button>Poster un nouvel argument</button>
+    </a>
     <div class="arguments">
         <div class="camp1">
             <h2 class="center"><?= $camp1->getName() ?></h2>

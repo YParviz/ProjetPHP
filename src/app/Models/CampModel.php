@@ -10,7 +10,7 @@ class CampModel
     private $pdo;
     public function __construct()
     {
-        $this->pdo = Database::getPDO();
+        $this->pdo = Database::connect();
     }
 
     public function getCampsByDebat(int $idDebat) : array

@@ -13,6 +13,7 @@ suivante :<pre>composer dump</pre> </a></p>";
 
 
 use Controllers\ArgumentController;
+use Models\ArgumentModel;
 use Symfony\Component\Dotenv\Dotenv;
 use FastRoute\RouteCollector;
 use function FastRoute\simpleDispatcher;
@@ -27,33 +28,19 @@ $container = require_once __DIR__ . '/../Container/container.php';
 
 // Initialisation de FastRoute
 $dispatcher = simpleDispatcher(function (RouteCollector $r) {
-    $r->get('/', function () {
-        $amodel = new \Models\ArgumentModel();
-        $argument = $amodel->getById(1);
-        $acontroller = new ArgumentController;
-        $acontroller->print($argument);
-    }); // page d'accueil
+    $r->get('/', 'Controllers\DebatController@listDebats'); // page d'accueil
     $r->get('/debats[/{page:\d+}]', 'Controllers\DebatController@listDebats'); // liste des débats avec pagination
     $r->get('/debat/{id:\d+}', 'Controllers\DebatController@viewDebat'); // page d'un débat spécifique
-    $r->addRoute(["GET", "POST"], '/argument/{id:\d}', function ($args) {
-        $amodel = new \Models\ArgumentModel();
-        $argument = $amodel->getById($args['id']);
-        $acontroller = new ArgumentController;
-        $acontroller->print($argument);
-    });
 
     $r->addRoute(["GET", "POST"], '/debate/{idDebate:\d}/arguments', function ($args) {
         ArgumentController::list($args['idDebate']);
     });
-
     $r->get('/debate/{idDebate:\d}/poste', function ($args) {
         ArgumentController::create($args['idDebate']);
     });
-
     $r->post('/debate/{idDebate:\d}/postArg', function ($args) {
         ArgumentController::poste($args['idDebate']);
     });
-
     $r->post('/vote', function () {
         ArgumentController::vote();
     });

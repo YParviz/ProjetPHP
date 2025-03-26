@@ -36,7 +36,6 @@ class ArgumentController
 
     public static function vote(): void
     {
-
         if (isset($_POST["idArgument"])) {
             $idArgument = $_POST["idArgument"];
             $argumentModel = new ArgumentModel();
@@ -53,7 +52,6 @@ class ArgumentController
 
     public static function unvote(): void
     {
-
         if (isset($_POST["idArgument"])) {
             $idArgument = $_POST["idArgument"];
             $argumentModel = new ArgumentModel();
