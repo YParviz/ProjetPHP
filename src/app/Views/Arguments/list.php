@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr-fr">
 <head>
-    <link rel="stylesheet" type="text/css" href="../../css/arguments/styleListArguments.css" />
-    <script src="../../js/arguments/scriptListArguments.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/arguments/styleListArguments.css" />
+    <script src="/js/arguments/scriptListArguments.js"></script>
     <title>Débat</title>
 </head>
 <body>

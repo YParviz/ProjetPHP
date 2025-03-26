@@ -36,31 +36,31 @@ class Debate {
     }
 
     // Getters
-    public function getIdDebat(): int {
+    public function getId(): int {
         return $this->id_debat;
     }
 
-    public function getNomD(): string {
+    public function getName(): string {
         return $this->nom_d;
     }
 
-    public function getDescD(): string {
+    public function getDescription(): string {
         return $this->desc_d;
     }
 
-    public function getStatut(): string {
+    public function getStatus(): string {
         return $this->statut;
     }
 
-    public function getDuree(): int {
+    public function getDuration(): int {
         return $this->duree;
     }
 
-    public function getDateCreation(): DateTime {
+    public function getCreationDate(): DateTime {
         return $this->date_creation;
     }
 
-    public function getIdUtilisateur(): int {
+    public function getUserId(): int {
         return $this->id_utilisateur;
     }
 
@@ -69,27 +69,27 @@ class Debate {
     }
 
     // Setters
-    public function setNomD(string $nom_d): void {
+    public function setName(string $nom_d): void {
         $this->nom_d = $nom_d;
     }
 
-    public function setDescD(string $desc_d): void {
+    public function setDescription(string $desc_d): void {
         $this->desc_d = $desc_d;
     }
 
-    public function setStatut(string $statut): void {
+    public function setStatus(string $statut): void {
         $this->statut = $statut;
     }
 
-    public function setDuree(int $duree): void {
+    public function setDuration(int $duree): void {
         $this->duree = $duree;
     }
 
-    public function setDateCreation(DateTime $date_creation): void {
+    public function setCreationDate(DateTime $date_creation): void {
         $this->date_creation = $date_creation;
     }
 
-    public function setIdUtilisateur(int $id_utilisateur): void {
+    public function setUserId(int $id_utilisateur): void {
         $this->id_utilisateur = $id_utilisateur;
     }
 
