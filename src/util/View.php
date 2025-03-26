@@ -1,8 +1,9 @@
 <?php namespace Util;
 
-class View {
+class View
+{
 
-    public function render($path, $data = false)
+    public function render($path, $data = false): void
     {
         if ($data) {
             foreach ($data as $key => $value) {
@@ -10,12 +11,14 @@ class View {
             }
         }
 
-        $filepath = "../app/Views/$path.php"; // Chemin relatif pour 'views'
+        $filepath = __DIR__."/../app/Views/$path.php";
+        require __DIR__."/../app/Views/navbar.php";
+        renderNavbar();
 
         if (file_exists($filepath)) {
             require $filepath;
         } else {
-            die("View: $path not found!");
+            die("View: $filepath not found!");
         }
 
     }

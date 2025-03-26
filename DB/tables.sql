@@ -19,7 +19,7 @@ CREATE TABLE Utilisateur(
                             pseudo VARCHAR(20) NOT NULL UNIQUE,
                             mdp VARCHAR(20) NOT NULL,
                             role ENUM('Utilisateur', 'Moderateur', 'Administrateur') NOT NULL DEFAULT 'Utilisateur',
-                            date_creation DATE NOT NULL DEFAULT CURRENT_DATE,
+                            date_creation DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                             PRIMARY KEY(id_utilisateur)
 );
 
@@ -36,7 +36,7 @@ CREATE TABLE Debat(
                       desc_d VARCHAR(500) NOT NULL,
                       statut ENUM('Attente', 'Valide', 'Ferme') NOT NULL DEFAULT 'Attente',
                       duree INT NOT NULL DEFAULT 24, -- Durée en heure
-                      date_creation DATE NOT NULL DEFAULT CURRENT_DATE,
+                      date_creation DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                       id_utilisateur INT NOT NULL,
                       PRIMARY KEY(id_debat),
                       FOREIGN KEY(id_utilisateur) REFERENCES Utilisateur(id_utilisateur)
@@ -52,7 +52,7 @@ CREATE TABLE Camp(
 
 CREATE TABLE Argument(
                          id_arg INT AUTO_INCREMENT NOT NULL,
-                         date_poste DATE NOT NULL DEFAULT CURRENT_DATE,
+                         date_poste DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                          texte VARCHAR(100) NOT NULL,
                          id_camp INT NOT NULL,
                          id_arg_principal INT,
@@ -67,7 +67,7 @@ CREATE TABLE Argument(
 CREATE TABLE Voter(
                       id_utilisateur INT NOT NULL,
                       id_arg INT NOT NULL,
-                      date_vote DATE NOT NULL DEFAULT CURRENT_DATE,
+                      date_vote DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                       PRIMARY KEY(id_utilisateur, id_arg),
                       FOREIGN KEY(id_utilisateur) REFERENCES Utilisateur(id_utilisateur),
                       FOREIGN KEY(id_arg) REFERENCES Argument(id_arg)
@@ -76,7 +76,7 @@ CREATE TABLE Voter(
 CREATE TABLE Signaler(
                          id_utilisateur INT NOT NULL,
                          id_arg INT NOT NULL,
-                         date_signalement DATE NOT NULL DEFAULT CURRENT_DATE,
+                         date_signalement DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                          est_valide BOOLEAN NOT NULL DEFAULT FALSE,
                          PRIMARY KEY(id_utilisateur, id_arg),
                          FOREIGN KEY(id_utilisateur) REFERENCES Utilisateur(id_utilisateur),
@@ -94,7 +94,7 @@ CREATE TABLE Contenir(
 CREATE TABLE Sanctionner(
                             id_arg INT NOT NULL,
                             id_utilisateur INT NOT NULL,
-                            date_sanction DATE NOT NULL DEFAULT CURRENT_DATE,
+                            date_sanction DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                             raison VARCHAR(500),
                             type_sanction ENUM('Avertissement', 'Bannissement') NOT NULL DEFAULT 'Avertissement',
                             PRIMARY KEY(id_arg),
@@ -104,7 +104,7 @@ CREATE TABLE Sanctionner(
 
 CREATE TABLE Valider(
                         id_arg INT NOT NULL,
-                        date_validation DATE NOT NULL DEFAULT CURRENT_DATE,
+                        date_validation DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                         id_utilisateur INT NOT NULL,
                         PRIMARY KEY(id_arg),
                         FOREIGN KEY(id_arg) REFERENCES Argument(id_arg),

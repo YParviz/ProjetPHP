@@ -2,17 +2,18 @@
 function renderNavbar(): void
 {
     echo '
+    <link rel="stylesheet" href="/css/navbar.css">
     <nav class="navbar">
         <div class="navbar__logo">
-            <a href="/DebatArena/src/web/">
-                <img src="/DebatArena/src/web/logo.png" alt="Debate Arena Logo" class="navbar__logo-img">
+            <a href="/">
+                <img src="/logo.png" alt="Debate Arena Logo" class="navbar__logo-img">
                 <span>Debate Arena</span>
             </a>
         </div>
         <div class="navbar__search">
             <input type="text" placeholder="Rechercher un débat..." />
             <button>
-                <img src="/DebatArena/src/web/loupe.png" alt="Loupe" class="search-icon" />
+                <img src="/loupe.png" alt="Loupe" class="search-icon" />
             </button>
         </div>
         <div class="navbar__actions">
@@ -20,7 +21,7 @@ function renderNavbar(): void
                 Créer un débat
             </button>
             <div class="user-icon">
-                <a href="/DebatArena/src/web/profil">
+                <a href="/profil">
                     <i class="fas fa-user-circle"></i>
                 </a>
             </div>

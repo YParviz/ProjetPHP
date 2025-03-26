@@ -80,6 +80,21 @@ class ArgumentModel
         ]);
         return $statement->rowCount() === 1;
     }
+
+    public function createNew(int $idCamp, string $text, int $idUser): bool
+    {
+        if ($text != "") {
+            $statement = $this->pdo->prepare("INSERT INTO Argument (texte, id_camp, id_utilisateur) VALUES (:texte, :id_camp, :id_utilisateur)");
+            $statement->execute([
+                "texte" => $text,
+                "id_camp" => $idCamp,
+                "id_utilisateur" => $idUser
+            ]);
+            return $statement->rowCount() === 1;
+        } else {
+            return true;
+        }
+    }
     public function delete(Argument $argument): bool
     {
         $statement = $this->pdo->prepare("DELETE FROM Argument WHERE id_arg = :id");
@@ -92,7 +107,7 @@ class ArgumentModel
         try {
             $statement = $this->pdo->prepare("INSERT INTO Voter (id_utilisateur, id_arg) VALUE (:id_utilisateur, :id_arg)");
             $statement->execute([
-                "id_utilisateur" => 1,
+                "id_utilisateur" => $_SESSION['user']['id'],
                 "id_arg" => $argument->getId()
             ]);
         } catch (Exception $e) {
@@ -107,7 +122,7 @@ class ArgumentModel
         try {
             $statement = $this->pdo->prepare("DELETE FROM Voter WHERE id_arg = :id_arg AND id_utilisateur = :id_utilisateur");
             $statement->execute([
-                "id_utilisateur" => 1,
+                "id_utilisateur" => $_SESSION['user']['id'],
                 "id_arg" => $argument->getId()
             ]);
         } catch (Exception $e) {
@@ -144,5 +159,4 @@ class ArgumentModel
             $sousArguments
         );
     }
-
 }

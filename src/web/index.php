@@ -16,12 +16,10 @@ suivante :<pre>composer dump</pre> </a></p>";
     exit;
 }
 
-//  Importation de la navbar
-require_once __DIR__ . '/../app/Views/navbar.php';
-
-
 $dotenv = new Dotenv();
 $dotenv->load(__DIR__ . '/../../.env');
+
+session_start();
 
 // Création du conteneur d'injection de dépendances
 $container = require_once __DIR__ . '/../Container/container.php';
@@ -31,22 +29,37 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
     $r->get('/', 'Controllers\DebatController@listDebats'); // page d'accueil
     $r->get('/debats[/{page:\d+}]', 'Controllers\DebatController@listDebats'); // liste des débats avec pagination
     $r->get('/debat/{id:\d+}', 'Controllers\DebatController@viewDebat'); // page d'un débat spécifique
-    $r->addRoute(["GET", "POST"], '/argument/{id:\d}', function ($args) {
-        $amodel = new \Models\ArgumentModel();
-        $argument = $amodel->getById($args['id']);
-        $acontroller = new ArgumentController;
-        $acontroller->print($argument);
-    });
 
     $r->addRoute(["GET", "POST"], '/debate/{idDebate:\d}/arguments', function ($args) {
         ArgumentController::list($args['idDebate']);
     });
-
+    $r->get('/debate/{idDebate:\d}/poste', function ($args) {
+        if(isset($_SESSION['user'])) {
+            ArgumentController::create($args['idDebate']);
+        } else {
+            header("Location: /login");
+        }
+    });
+    $r->post('/debate/{idDebate:\d}/postArg', function ($args) {
+        if(isset($_SESSION['user'])) {
+            ArgumentController::poste($args['idDebate']);
+        } else {
+            header("Location: /login");
+        }
+    });
     $r->post('/vote', function () {
-        ArgumentController::vote();
+        if(isset($_SESSION['user'])) {
+            ArgumentController::vote();
+        } else {
+            header($_SERVER["SERVER_PROTOCOL"] . " 500 Internal Server Error");
+        }
     });
     $r->post('/unvote', function () {
-        ArgumentController::unvote();
+        if(isset($_SESSION['user'])) {
+            ArgumentController::unvote();
+        } else {
+            header($_SERVER["SERVER_PROTOCOL"] . " 500 Internal Server Error");
+        }
     });
 
     $r->addRoute(["GET", "POST"], '/login', function () {
@@ -96,8 +109,6 @@ if (empty($uri)) {
     $uri = '/';
 }
 
-// ça affiche la navbar
-renderNavbar();
 
 // On dispatch la requête avec FastRoute
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
@@ -116,16 +127,9 @@ switch ($routeInfo[0]) {
         break;
 
     case FastRoute\Dispatcher::FOUND:
-        [$class, $method] = explode('@', $routeInfo[1]);
+        $handler = $routeInfo[1];
         $vars = $routeInfo[2];
 
-        // On instancie le contrôleur et appele la méthode qui correspond grace au conteneur
-        $controllerInstance = $container->get($class);
-        if (method_exists($controllerInstance, $method)) {
-            call_user_func_array([$controllerInstance, $method], $vars);
-        } else {
-            http_response_code(500);
-            echo "Méthode '$method' introuvable dans le contrôleur '$class'.";
-        }
+        print $handler($vars);
         break;
 }
