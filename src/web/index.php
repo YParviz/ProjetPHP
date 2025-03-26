@@ -127,9 +127,17 @@ switch ($routeInfo[0]) {
         break;
 
     case FastRoute\Dispatcher::FOUND:
-        $handler = $routeInfo[1];
+        [$class, $method] = explode('@', $routeInfo[1]);
         $vars = $routeInfo[2];
 
-        print $handler($vars);
+        // On instancie le contrôleur et appele la méthode qui correspond grace au conteneur
+        $controllerInstance = $container->get($class);
+        if (method_exists($controllerInstance, $method)) {
+            call_user_func_array([$controllerInstance, $method], $vars);
+        } else {
+            http_response_code(500);
+            echo "Contrôleur '$class' introuvable.";
+            echo "Méthode '$method' introuvable dans le contrôleur '$class'.";
+        }
         break;
 }
