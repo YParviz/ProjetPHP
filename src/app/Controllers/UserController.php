@@ -21,7 +21,6 @@ class UserController
         $debates = $userModel->getDebatesByEmail($email);
 
         if ($user && $mdp === $user->getMdp()) {
-            session_start();
             $_SESSION['user'] = [
                 'id' => $user->getId_utilisateur(),
                 'email' => $user->getEmail(),
@@ -51,8 +50,6 @@ class UserController
 
     public static function showProfile()
     {
-        session_start();
-
         if (isset($_SESSION['user']['email'])) {
             $userModel = new UserModel();
             $user = $userModel->getUserByEmail($_SESSION['user']['email']);
@@ -85,8 +82,6 @@ class UserController
 
     public static function updateProfile()
     {
-        session_start();
-
         if (!isset($_SESSION['user']['id'])) {
             echo "Veuillez vous connecter.";
             return;
@@ -109,8 +104,6 @@ class UserController
 
     public static function deleteProfile()
     {
-        session_start();
-
         if (!isset($_SESSION['user']['id'])) {
             echo "Veuillez vous connecter.";
             return;
@@ -120,9 +113,22 @@ class UserController
         $userModel = new UserModel();
         $userModel->deleteUser($userId);
 
-        session_destroy();
         echo "<script>alert('Votre compte a été supprimé avec succès.'); window.location.href='/';</script>";
     }
 
+    public static function createProfile(string $pseudo, string $email, string $password)
+    {
+        if($pseudo && $email && $password){
+            $userModel = new UserModel();
+            if ($userModel->createUser($pseudo,$email,$password)) {
+                self::login($email, $password);
+            } else{
+                echo "<script>alert('Problème lors de la création du profile (email déjà utilisé ou pseudo déjà utilisé).'); window.location.href='/register';</script>";
+            }
+        }
+    }
 
+    public static function logout(){
+        unset($_SESSION['user']);
+    }
 }

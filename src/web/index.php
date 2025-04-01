@@ -104,6 +104,27 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
     $r->get('/deleteProfile', function () {
         UserController::deleteProfile();
     });
+
+    $r->addRoute(["GET", "POST"], '/register', function () {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $pseudo = $_POST['pseudo'] ?? null;
+            $email = $_POST['email'] ?? null;
+            $password = $_POST['password'] ?? null;
+
+            if ($pseudo && $email && $password) {
+                UserController::createProfile($pseudo,$email, $password);
+            } else {
+                echo "Veuillez remplir tous les champs.";
+            }
+        } else {
+            require __DIR__ . '/../app/Views/User/register.php'; // Affichage du formulaire
+        }
+    });
+
+    $r->get('/logout', function () {
+        UserController::logout();
+        header("Location: /");
+    });
 });
 
 // Je recupère la méthode de la requête HTTP
