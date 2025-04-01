@@ -17,6 +17,7 @@
     ],
     "require": {
         "ext-pdo": "*",
+        "fakerphp/faker": "^1.24",
         "nikic/fast-route": "^1.3",
         "php-di/php-di": "^7.0",
         "symfony/dotenv": "^7.2"
