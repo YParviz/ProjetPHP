@@ -1,0 +1,51 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    width: 100vw;
+}
+
+.card {
+    background-color: #FEF8E8;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+}
+
+.radioSetCamp {
+
+}
+
+.textArgument {
+    width: 668px;
+    height: 201px;
+    resize: none;
+}
+
+.buttonBack {
+    background-color: #B2C3D3;
+}
+
+.buttonSubmit {
+    background-color: #A2A9DC;
+}
+.buttonBack, .buttonSubmit {
+    border: none;
+    border-radius: 20px;
+    padding: 10px 30px;
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-top: 18px;
+}
+
+.buttonSubmit:hover {
+    transform: scale(1.05);
+    box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.3);
+}

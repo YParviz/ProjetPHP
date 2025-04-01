@@ -10,6 +10,7 @@ body {
     text-align: center;
     margin: 2% 5%;
     border-radius: 18px;
+    padding-top: 5px;
 }
 
 .arguments {
@@ -69,7 +70,7 @@ body {
 }
 
 .buttonPost {
-    background-color: #B2C3D3;
+    background-color: #A2A9DC;
     border: none;
     border-radius: 20px;
     padding: 10px 30px;
