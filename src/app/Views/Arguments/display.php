@@ -1,7 +1,7 @@
 <div class="argument">
     <div class="argument<?= $argument->getNumCamp() ?>">
         <p><?= $argument->getText() ?></p>
-        <div class="divVote">
+        <div class="center">
             <?php if (!in_array($argument->getId(), $votes)): ?>
                 <input type="image" src="../../image/arguments/vote.png" alt="Bouton de vote" class="imageVote" id="imgVoteArg<?= $argument->getId()?>" onclick="vote(<?= $argument->getId() ?>)">
             <?php else: ?>
@@ -14,7 +14,7 @@
         <?php foreach($argument->getSousArguments() as $sousArgument): ?>
             <div class="sousArgument<?= $sousArgument->getNumCamp() ?>">
                 <p><?= $sousArgument->getText() ?></p>
-                <div class="divVote">
+                <div class="center">
                     <?php if (!in_array($sousArgument->getId(), $votes)): ?>
                         <input type="image" src="../../image/arguments/vote.png" alt="Bouton de vote" class="imageVote" id="imgVoteArg<?= $argument->getId()?>" onclick="vote(<?= $argument->getId() ?>)">
                     <?php else: ?>
