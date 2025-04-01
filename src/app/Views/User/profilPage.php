@@ -133,6 +133,7 @@
             </p>
 
             <div class="bouton">
+                <button type="button" class="button button-modifier" id="logoutButton" onclick="logout()">Déconnexion</button>
                 <button type="button" class="button button-modifier" id="editButton" onclick="toggleEdit()">Modifier</button>
                 <button type="button" class="button button-supprimer" onclick="confirmDelete()">Supprimer</button>
             </div>
@@ -167,6 +168,10 @@
                 if (confirmation) {
                     window.location.href = "/deleteProfile";
                 }
+            }
+
+            function logout(){
+                window.location.href = "/logout";
             }
         </script>
 

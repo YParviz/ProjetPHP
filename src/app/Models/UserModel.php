@@ -5,6 +5,8 @@ namespace Models;
 use Entity\User;
 use Entity\Debate;
 use PDO;
+use PDOException;
+use Psr\Log\LoggerInterface;
 use Util\Database;
 use DateTime;
 
@@ -127,7 +129,20 @@ class UserModel
 
         $this->pdo->commit();
     }
-    
+
+    public function createUser(string $pseudo, string $email, string $password): bool
+    {
+        try{
+            $stm = $this->pdo->prepare("
+            INSERT INTO `Utilisateur`(`email`, `pseudo`, `mdp`) VALUES (:email, :pseudo, :password) 
+            ");
+            $stm->execute(['email' => $email, 'pseudo' => $pseudo, 'password' => $password]);
+
+        }catch (PDOException $e){
+            return false;
+        }
+        return $stm->rowCount() === 1;
+    }
     
 
     public function createByTab(array $data): User

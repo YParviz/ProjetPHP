@@ -29,7 +29,7 @@
             margin-bottom: 20px;
         }
 
-        .email, .password {
+        .email, .password, .pseudo {
             display: flex;
             flex-direction: column;
             text-align: left;
@@ -41,7 +41,8 @@
         }
 
         input[type="email"],
-        input[type="password"] {
+        input[type="password"],
+        input[type="text"]{
             width: 100%;
             padding: 10px;
             border: none;
@@ -84,37 +85,36 @@
             gap: 16px;
             justify-content: center;
         }
-
-        a{
-            font-size: 12px;
-        }
     </style>
 </head>
 <body>
-    <form action="/login" method="POST" class="card">
-        <h2>Ravi de vous revoir !</h2>
-        <div class="email">
-            <label for="email">Adresse email :</label>
-            <input type="email" name="email" id="email" placeholder="Adresse email" required>
-        </div>
+<form action="/register" method="POST" class="card">
+    <h2>Créer un compte</h2>
+    <div class="pseudo">
+        <label for="pseudo">Pseudo :</label>
+        <input type="text" name="pseudo" id="pseudo" placeholder="Pseudo" required>
+    </div>
 
-        <div class="password">
-            <label for="mdp">Mot de passe :</label>
-            <input type="password" name="mdp" id="mdp" placeholder="Mot de passe" required>
-        </div>
-        <div class="btn">
-            <button type="submit" class="button_retour" onclick="retour()">Retour</button>
-            <button type="submit" class="button">Se connecter</button>
-        </div>
-        <br>
-        <a href="register.php">Souhaitez-vous créer un compte ?</a>
+    <div class="email">
+        <label for="email">Adresse email :</label>
+        <input type="email" name="email" id="email" placeholder="Adresse email" required>
+    </div>
+
+    <div class="password">
+        <label for="mdp">Mot de passe :</label>
+        <input type="password" name="password" id="password" placeholder="Mot de passe" required>
+    </div>
+    <div class="btn">
+        <button type="submit" class="button_retour" onclick="retour()">Retour</button>
+        <button type="submit" class="button">Créer un compte</button>
+    </div>
 
 
-        <script>
-            function retour() {
-                window.location.href = "/";
-            }
-        </script>
-    </form>
+    <script>
+        function retour() {
+            window.location.href = "/";
+        }
+    </script>
+</form>
 </body>
 </html>
