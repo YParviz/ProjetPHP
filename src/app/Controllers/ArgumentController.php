@@ -78,7 +78,7 @@ class ArgumentController
             $idCamp = $_POST["camp"];
             $argument = $_POST["argument"];
             if ($argumentModel->createNew($idCamp, $argument, $_SESSION["user"]["id"])) {
-                header("Location: /debate/$idDebate/arguments");
+                header("Location: /debat/$idDebate");
             } else {
                 header($_SERVER["SERVER_PROTOCOL"] . " 500 Internal Server Error");
             }
