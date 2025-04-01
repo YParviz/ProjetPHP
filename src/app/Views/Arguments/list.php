@@ -3,12 +3,11 @@
 <head>
     <link rel="stylesheet" type="text/css" href="/css/arguments/styleListArguments.css" />
     <script src="/js/arguments/scriptListArguments.js"></script>
-    <title>Débat</title>
 </head>
 <body>
     <br>
     <a href="/debate/<?= $debat->getId()?>/poste">
-        <button>Poster un nouvel argument</button>
+        <button class="buttonPost">Poster un nouvel argument</button>
     </a>
     <div class="arguments">
         <div class="camp1">

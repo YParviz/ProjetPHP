@@ -1,5 +1,25 @@
+body {
+    background-color: #f5f5f5;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    background-color: #FEF8E8;
+    text-align: center;
+    margin: 2% 5%;
+    border-radius: 18px;
+    padding-top: 5px;
+}
+
 .arguments {
     display: flex;
+    justify-content: center;
+}
+
+.camp1, .camp2 {
+    width: 45%;
 }
 
 .camp1 {
@@ -11,7 +31,7 @@
 }
 
 .argument1, .argument2 {
-    border-radius: 22px;
+    border-radius: 18px;
     padding: 1px;
 }
 .argument1 {
@@ -26,9 +46,8 @@
     margin-left: 20px;
     margin-right: 20px;
 }
-
 .sousArgument1, .sousArgument2 {
-    border-radius: 0 0 22px 22px;
+    border-radius: 0 0 18px 18px;
     padding: 1px;
 }
 .sousArgument1 {
@@ -42,14 +61,27 @@
     text-align: center;
 }
 
-.divVote {
-    text-align: center;
-}
-
 .imageVote {
     top: 3px;
     position: relative;
     width: 19px;
     height: 19px;
     text-align: center;
+}
+
+.buttonPost {
+    background-color: #A2A9DC;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 30px;
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.buttonPost:hover {
+    transform: scale(1.05);
+    box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.3);
 }
