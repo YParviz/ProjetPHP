@@ -10,7 +10,7 @@ $containerBuilder->addDefinitions([
     // PDO
     PDO::class => function() {
         return new PDO(
-            "mysql:host={$_ENV['DB_HOST']};port={$_ENV['DB_PORT']};dbname={$_ENV['DB_NAME']};charset={$_ENV['DB_CHARSET']}",
+            "{$_ENV['DB_TYPE']}:host={$_ENV['DB_HOST']};port={$_ENV['DB_PORT']};dbname={$_ENV['DB_NAME']};charset={$_ENV['DB_CHARSET']}",
             $_ENV['DB_USER'],
             $_ENV['DB_PASSWORD'],
             [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
