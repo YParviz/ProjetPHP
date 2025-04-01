@@ -231,5 +231,30 @@ class DebatModel
         ];
     }
 
+    public function addDebat($nom, $description, $idUtilisateur)
+    {
+        $sql = "INSERT INTO Debat (nom_d, desc_d, id_utilisateur, statut) VALUES (:nom, :description, :idUtilisateur, :statut)";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            'nom' => $nom,
+            'description' => $description,
+            'idUtilisateur' => $idUtilisateur,
+            'statut' => 'Valide'
+        ]);
+
+        return $this->db->lastInsertId();
+    }
+
+
+    public function addCamp($idDebat, $nomCamp)
+    {
+        $sql = "INSERT INTO Camp (nom_camp, id_debat) VALUES (:nomCamp, :idDebat)";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            'nomCamp' => $nomCamp,
+            'idDebat' => $idDebat
+        ]);
+    }
+
 
 }

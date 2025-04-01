@@ -22,7 +22,8 @@ $containerBuilder->addDefinitions([
         // Injection des modèles nécessaires dans le contrôleur
         $debatModel = $c->get(DebatModel::class);
         $userStatModel = $c->get(UserStatModel::class);
-        return new DebatController($debatModel, $userStatModel);
+        // Ajoutez ici le conteneur
+        return new DebatController($debatModel, $userStatModel, $c);
     },
 
     // Modèles
@@ -35,6 +36,7 @@ $containerBuilder->addDefinitions([
         return new UserStatModel($pdo);
     },
 ]);
+
 
 $container = $containerBuilder->build();
 return $container;

@@ -1,6 +1,9 @@
 <?php
 function renderNavbar(): void
 {
+    // Vérifier si l'utilisateur est connecté
+    $isUserLoggedIn = isset($_SESSION['user']);
+
     echo '
     <link rel="stylesheet" href="/css/navbar.css">
     <nav class="navbar">
@@ -16,16 +19,20 @@ function renderNavbar(): void
                 <img src="/loupe.png" alt="Loupe" class="search-icon" />
             </button>
         </div>
-        <div class="navbar__actions">
-            <a href="/profile" class="login-button">
-                <img src="/image/profil.svg">
-            </a>
-            <div class="user-icon">
-                <a href="/profil">
-                    <i class="fas fa-user-circle"></i>
-                </a>
-            </div>
-        </div>
-    </nav>
-    ';
+        <div class="navbar__actions">';
+
+    // Bouton "Ajouter un débat" (Redirige vers /debat/creer si connecté, sinon vers /login)
+    $debateUrl = $isUserLoggedIn ? "/debat/creer" : "/login";
+    echo '
+        <a href="' . $debateUrl . '" class="btn-create-debate">
+            Ajouter un débat
+        </a>';
+
+    // Icône de connexion
+    echo '
+        <a href="/profile" class="login-button">
+            <img src="/image/profil.svg">
+        </a>
+    </div></nav>';
 }
+?>
