@@ -46,12 +46,6 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
         $debatController->viewDebat($args['id']);
     });
 
-    $r->addRoute(["GET", "POST"], '/debate/{idDebate:\d}/arguments', function ($args) {
-        global $container;
-        $argumentController = $container->get(ArgumentController::class);
-        $argumentController->list($args['idDebate']);
-    });
-
     $r->get('/debat/creer', function () {
         if(isset($_SESSION['user'])) {
             global $container;
@@ -74,7 +68,7 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
         }
     });
 
-    $r->get('/debate/{idDebate:\d}/poste', function ($args) {
+    $r->get('/debate/{idDebate:\d+}/poste', function ($args) {
         if(isset($_SESSION['user'])) {
             global $container;
             $argumentController = $container->get(ArgumentController::class);
@@ -84,7 +78,7 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
         }
     });
 
-    $r->post('/debate/{idDebate:\d}/postArg', function ($args) {
+    $r->post('/debate/{idDebate:\d+}/postArg', function ($args) {
         if(isset($_SESSION['user'])) {
             global $container;
             $argumentController = $container->get(ArgumentController::class);
