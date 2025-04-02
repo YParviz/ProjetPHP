@@ -13,7 +13,7 @@ Le script de création des tables est disponible avec le fichier `DB/tables.sql`
 Le script d'initialisation des données générés par IA lors du premier semestre est disponible avec le fichier `DB/donnees.sql`.
 
 ## Lancer le script Faker pour générer des données
-php src/util/seed_database.php
+ `php src/util/seed_database.php`
 
 ## Initialisation des dépendances PHP
 Pour installer correctement toutes les dépendances nécessaires au projet, il faut faire les deux commandes suivante :
