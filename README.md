@@ -1,6 +1,7 @@
 # Debate Arena
 
-Il s'agit du projet DebateArena développé par Firmin EON, Thomas HAY et Youssef PARVIZ.
+Il s'agit du projet DebateArena développé par Firmin EON, Thomas HAY et Youssef PARVIZ.  
+Ce projet est une plateforme de débats en ligne qui permet aux utilisateurs de créer des débats, d'y participer en postant des arguments et de voter pour les arguments des autres participants.
 
 Pour tester ce projet, il vous faut :
 - une installation PHP avec le PDO pour MySQL
@@ -10,6 +11,9 @@ Pour tester ce projet, il vous faut :
 ## Initialisation de la base de données
 Le script de création des tables est disponible avec le fichier `DB/tables.sql`.
 Le script d'initialisation des données générés par IA lors du premier semestre est disponible avec le fichier `DB/donnees.sql`.
+
+## Lancer le script Faker pour générer des données
+php src/util/seed_database.php
 
 ## Initialisation des dépendances PHP
 Pour installer correctement toutes les dépendances nécessaires au projet, il faut faire les deux commandes suivante :
