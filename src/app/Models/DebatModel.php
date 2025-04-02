@@ -2,6 +2,7 @@
 
 namespace Models;
 
+use Exception;
 use PDO;
 use Entity\Debate;
 use Entity\Argument;
@@ -166,8 +167,7 @@ class DebatModel
 
         try {
             $dateCreation = new \DateTime($row['date_creation']);
-        } catch (\Exception $e) {
-            file_put_contents(__DIR__ . '/debug.log', "Erreur de conversion DateTime : " . $e->getMessage() . "\n", FILE_APPEND);
+        } catch (Exception $e) {
             return null;
         }
 

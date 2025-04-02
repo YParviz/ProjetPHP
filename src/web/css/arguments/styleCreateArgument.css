@@ -24,6 +24,15 @@
     width: 668px;
     height: 201px;
     resize: none;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+.textArgument:focus {
+    border-color: #8c91e3;
+    outline: none;
 }
 
 .buttonBack {
