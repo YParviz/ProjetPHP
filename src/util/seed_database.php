@@ -4,30 +4,9 @@ require __DIR__ . '/../../vendor/autoload.php';
 
 use Symfony\Component\Dotenv\Dotenv;
 use DI\ContainerBuilder;
+use Util\Database;
 
-// Charger les variables d'environnement
-$dotenv = new Dotenv();
-$dotenv->load(__DIR__ . '/../../.env');
-
-// Créer le conteneur avec les définitions
-$containerBuilder = new ContainerBuilder();
-$containerBuilder->addDefinitions([
-    // PDO
-    PDO::class => function() {
-        return new PDO(
-            'mysql:host=' . $_ENV['DB_HOST'] . ';port=' . $_ENV['DB_PORT'] . ';dbname=' . $_ENV['DB_NAME'] . ';charset=' . $_ENV['DB_CHARSET'],
-            $_ENV['DB_USER'],
-            $_ENV['DB_PASS'],
-            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-        );
-    },
-]);
-
-$container = $containerBuilder->build();
-
-// Récupérer l'instance PDO via le conteneur
-$pdo = $container->get(PDO::class);
-
+$pdo = Database::connect();
 // Initialisation de Faker
 $faker = Faker\Factory::create('fr_FR');
 
@@ -49,7 +28,7 @@ $pdo->exec("
 ");
 
 // -----------------------------
-// 1️⃣ Insertion des utilisateurs
+// Insertion des utilisateurs
 // -----------------------------
 $roles = ['Utilisateur', 'Moderateur', 'Administrateur'];
 $utilisateurs = [];
@@ -67,7 +46,7 @@ for ($i = 0; $i < 10; $i++) {
 }
 
 // -----------------------------
-// 2️⃣ Insertion des catégories
+// Insertion des catégories
 // -----------------------------
 $categories = [];
 
@@ -82,7 +61,7 @@ for ($i = 0; $i < 5; $i++) {
 }
 
 // -----------------------------
-// 3️⃣ Insertion des débats
+// Insertion des débats
 // -----------------------------
 $debat_ids = [];
 
@@ -100,7 +79,7 @@ for ($i = 0; $i < 5; $i++) {
 }
 
 // -----------------------------
-// 4️⃣ Insertion des camps
+// Insertion des camps
 // -----------------------------
 $camps = [];
 
@@ -116,7 +95,7 @@ foreach ($debat_ids as $id_debat) {
 }
 
 // -----------------------------
-// 5️⃣ Insertion des arguments
+// Insertion des arguments
 // -----------------------------
 $arguments = [];
 
@@ -133,7 +112,7 @@ foreach ($camps as $id_camp) {
 }
 
 // -----------------------------
-// 6️⃣ Voter pour les arguments
+// Voter pour les arguments
 // -----------------------------
 foreach ($utilisateurs as $id_utilisateur) {
     $nb_votes = $faker->numberBetween(1, 5);
@@ -147,7 +126,7 @@ foreach ($utilisateurs as $id_utilisateur) {
 }
 
 // -----------------------------
-// 7️⃣ Signaler des arguments
+// Signaler des arguments
 // -----------------------------
 foreach ($utilisateurs as $id_utilisateur) {
     if ($faker->boolean(20)) { // 20% de chances de signaler un argument
@@ -158,7 +137,7 @@ foreach ($utilisateurs as $id_utilisateur) {
 }
 
 // -----------------------------
-// 8️⃣ Associer catégories & débats
+// Associer catégories & débats
 // -----------------------------
 foreach ($debat_ids as $id_debat) {
     $id_categorie = $faker->randomElement($categories);
@@ -167,7 +146,7 @@ foreach ($debat_ids as $id_debat) {
 }
 
 // -----------------------------
-// 9️⃣ Sanctionner des arguments
+// Sanctionner des arguments
 // -----------------------------
 foreach ($arguments as $id_arg) {
     if ($faker->boolean(10)) { // 10% de chances d'avoir une sanction
@@ -181,7 +160,7 @@ foreach ($arguments as $id_arg) {
 }
 
 // -----------------------------
-// 🔟 Statistiques des débats
+// Statistiques des débats
 // -----------------------------
 foreach ($debat_ids as $id_debat) {
     $id_camp_gagnant = $faker->randomElement($camps);
@@ -197,5 +176,5 @@ foreach ($debat_ids as $id_debat) {
     $stmt->execute([$id_debat, $id_camp_gagnant, $nb_participant, $nb_vote_camp_1, $nb_vote_camp_2, $nb_vote_moyen, $nb_arg_camp_1, $nb_arg_camp_2, $nb_arg_moyen]);
 }
 
-echo "✅ Base de données remplie avec succès !";
+echo "Base de données remplie avec succès !";
 ?>
