@@ -2,9 +2,31 @@
 
 require __DIR__ . '/../../vendor/autoload.php';
 
-// Connexion à la base de données
-$pdo = new PDO('mysql:host=localhost;dbname=debate arena', 'root', '');
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+use Symfony\Component\Dotenv\Dotenv;
+use DI\ContainerBuilder;
+
+// Charger les variables d'environnement
+$dotenv = new Dotenv();
+$dotenv->load(__DIR__ . '/../../.env');
+
+// Créer le conteneur avec les définitions
+$containerBuilder = new ContainerBuilder();
+$containerBuilder->addDefinitions([
+    // PDO
+    PDO::class => function() {
+        return new PDO(
+            'mysql:host=' . $_ENV['DB_HOST'] . ';port=' . $_ENV['DB_PORT'] . ';dbname=' . $_ENV['DB_NAME'] . ';charset=' . $_ENV['DB_CHARSET'],
+            $_ENV['DB_USER'],
+            $_ENV['DB_PASS'],
+            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+        );
+    },
+]);
+
+$container = $containerBuilder->build();
+
+// Récupérer l'instance PDO via le conteneur
+$pdo = $container->get(PDO::class);
 
 // Initialisation de Faker
 $faker = Faker\Factory::create('fr_FR');

@@ -12,11 +12,13 @@ class DebatController
 {
     private DebatModel $debatModel;
     private UserStatModel $userStatModel;
+    private $container;
 
-    public function __construct(DebatModel $debatModel, UserStatModel $userStatModel)
+    public function __construct(DebatModel $debatModel, UserStatModel $userStatModel, $container)
     {
         $this->debatModel = $debatModel;
         $this->userStatModel = $userStatModel;
+        $this->container = $container;
     }
 
 
@@ -109,4 +111,49 @@ class DebatController
             exit;
         }
     }
+    public function createDebatForm(): void
+    {
+        if (!isset($_SESSION['user'])) {
+            header("Location: /login");
+            exit;
+        }
+
+        $view = new View();
+        $view->render("Debat/create_debat", []);
+    }
+
+    public function createDebat()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $nom = $_POST['nom'] ?? null;
+            $description = $_POST['description'] ?? null;
+            $camp1 = $_POST['camp1'] ?? null;
+            $camp2 = $_POST['camp2'] ?? null;
+            $idUtilisateur = $_SESSION['user']['id'] ?? null;
+
+            if ($nom && $description && $camp1 && $camp2 && $idUtilisateur) {
+                $debatModel = $this->container->get(DebatModel::class);
+                $idDebat = $debatModel->addDebat($nom, $description, $idUtilisateur);
+
+                if ($idDebat) {
+                    // Ajout des camps personnalisés saisis par l'utilisateur
+                    $debatModel->addCamp($idDebat, $camp1);
+                    $debatModel->addCamp($idDebat, $camp2);
+
+                    echo "<script>alert('Débat créé avec succès !'); window.location.href='/debats/1';</script>";
+                } else {
+                    echo "<script>alert('Erreur lors de la création du débat.'); window.location.href='/createDebat';</script>";
+                }
+            } else {
+                echo "<script>alert('Veuillez remplir tous les champs.'); window.location.href='/createDebat';</script>";
+            }
+        } else {
+            $view = new View();
+            $view->render("Debat/create");
+        }
+    }
+
+
+
+
 }
