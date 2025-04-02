@@ -76,7 +76,7 @@ class ArgumentController
         $argumentModel = new ArgumentModel();
         if (isset($_POST["camp"])  and isset($_POST["argument"])) {
             $idCamp = $_POST["camp"];
-            $argument = $_POST["argument"];
+            $argument = htmlspecialchars($_POST["argument"]);
             if ($argumentModel->createNew($idCamp, $argument, $_SESSION["user"]["id"])) {
                 header("Location: /debat/$idDebate");
             } else {
