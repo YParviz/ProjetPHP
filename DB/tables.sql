@@ -26,7 +26,7 @@ CREATE TABLE Utilisateur(
 CREATE TABLE Categorie(
                           id_c INT AUTO_INCREMENT NOT NULL,
                           nom_c VARCHAR(100) NOT NULL UNIQUE,
-                          desc_c VARCHAR(500) NOT NULL,
+                          desc_c VARCHAR(1000) NOT NULL,
                           PRIMARY KEY(id_c)
 );
 
@@ -44,7 +44,7 @@ CREATE TABLE Debat(
 
 CREATE TABLE Camp(
                      id_camp INT AUTO_INCREMENT NOT NULL,
-                     nom_camp VARCHAR(100) NOT NULL,
+                     nom_camp VARCHAR(200) NOT NULL,
                      id_debat INT NOT NULL,
                      PRIMARY KEY(id_camp),
                      FOREIGN KEY(id_debat) REFERENCES Debat(id_debat)
@@ -53,7 +53,7 @@ CREATE TABLE Camp(
 CREATE TABLE Argument(
                          id_arg INT AUTO_INCREMENT NOT NULL,
                          date_poste DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                         texte VARCHAR(100) NOT NULL,
+                         texte VARCHAR(1000) NOT NULL,
                          id_camp INT NOT NULL,
                          id_arg_principal INT,
                          id_utilisateur INT NOT NULL,

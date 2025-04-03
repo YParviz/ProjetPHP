@@ -6,6 +6,9 @@ use Symfony\Component\Dotenv\Dotenv;
 use DI\ContainerBuilder;
 use Util\Database;
 
+$dotenv = new Dotenv();
+$dotenv->load(__DIR__ . '/../../.env');
+
 $pdo = Database::connect();
 // Initialisation de Faker
 $faker = Faker\Factory::create('fr_FR');
@@ -36,7 +39,7 @@ $utilisateurs = [];
 for ($i = 0; $i < 10; $i++) {
     $email = $faker->unique()->email;
     $pseudo = $faker->unique()->userName;
-    $mdp = password_hash($faker->password, PASSWORD_BCRYPT);
+    $mdp = $faker->password;
     $role = $faker->randomElement($roles);
 
     $stmt = $pdo->prepare("INSERT INTO Utilisateur (email, pseudo, mdp, role) VALUES (?, ?, ?, ?)");
@@ -101,7 +104,7 @@ $arguments = [];
 
 foreach ($camps as $id_camp) {
     for ($i = 0; $i < 5; $i++) {  // Chaque camp a 5 arguments
-        $texte = $faker->sentence(12);
+        $texte = $faker->sentence(10);
         $id_utilisateur = $faker->randomElement($utilisateurs);
 
         $stmt = $pdo->prepare("INSERT INTO Argument (texte, id_camp, id_utilisateur) VALUES (?, ?, ?)");
@@ -176,5 +179,5 @@ foreach ($debat_ids as $id_debat) {
     $stmt->execute([$id_debat, $id_camp_gagnant, $nb_participant, $nb_vote_camp_1, $nb_vote_camp_2, $nb_vote_moyen, $nb_arg_camp_1, $nb_arg_camp_2, $nb_arg_moyen]);
 }
 
-echo "Base de données remplie avec succès !";
+echo "Base de données remplie avec succès !".PHP_EOL;
 ?>
