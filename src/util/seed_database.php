@@ -13,23 +13,6 @@ $pdo = Database::connect();
 // Initialisation de Faker
 $faker = Faker\Factory::create('fr_FR');
 
-// Vider les tables pour éviter les doublons
-$pdo->exec("
-    SET FOREIGN_KEY_CHECKS = 0;
-    TRUNCATE TABLE Statistique;
-    TRUNCATE TABLE Valider;
-    TRUNCATE TABLE Sanctionner;
-    TRUNCATE TABLE Contenir;
-    TRUNCATE TABLE Signaler;
-    TRUNCATE TABLE Voter;
-    TRUNCATE TABLE Argument;
-    TRUNCATE TABLE Camp;
-    TRUNCATE TABLE Debat;
-    TRUNCATE TABLE Categorie;
-    TRUNCATE TABLE Utilisateur;
-    SET FOREIGN_KEY_CHECKS = 1;
-");
-
 // -----------------------------
 // Insertion des utilisateurs
 // -----------------------------
@@ -161,23 +144,5 @@ foreach ($arguments as $id_arg) {
         $stmt->execute([$id_arg, $id_utilisateur, $raison, $type_sanction]);
     }
 }
-
-// -----------------------------
-// Statistiques des débats
-// -----------------------------
-foreach ($debat_ids as $id_debat) {
-    $id_camp_gagnant = $faker->randomElement($camps);
-    $nb_participant = count($utilisateurs);
-    $nb_vote_camp_1 = $faker->numberBetween(10, 50);
-    $nb_vote_camp_2 = $faker->numberBetween(10, 50);
-    $nb_vote_moyen = ($nb_vote_camp_1 + $nb_vote_camp_2) / 2;
-    $nb_arg_camp_1 = $faker->numberBetween(5, 20);
-    $nb_arg_camp_2 = $faker->numberBetween(5, 20);
-    $nb_arg_moyen = ($nb_arg_camp_1 + $nb_arg_camp_2) / 2;
-
-    $stmt = $pdo->prepare("INSERT INTO Statistique VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->execute([$id_debat, $id_camp_gagnant, $nb_participant, $nb_vote_camp_1, $nb_vote_camp_2, $nb_vote_moyen, $nb_arg_camp_1, $nb_arg_camp_2, $nb_arg_moyen]);
-}
-
 echo "Base de données remplie avec succès !".PHP_EOL;
 ?>
