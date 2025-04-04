@@ -1,5 +1,6 @@
 {
     "name": "univ-nantes/debate-arena",
+    "description": "DebateArena",
     "autoload": {
         "psr-4": {
             "Controllers\\": "src\\app\\Controllers",
