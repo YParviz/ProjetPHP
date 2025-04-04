@@ -9,28 +9,6 @@ use Util\View;
 
 class ArgumentController
 {
-    public static function print(Argument $argument): void
-    {
-        $view = new View();
-        $view->render("Arguments/print", ["argument" => $argument]);
-    }
-
-    public static function list(int $idDebat): void
-    {
-        if(isset($_SESSION['user']['id'])) {
-            $userId = $_SESSION['user']['id'];
-        } else {
-            $userId = 0;
-        }
-        $argumentModel = new ArgumentModel();
-        $arguments = $argumentModel->getByDebat($idDebat);
-        $votes = $argumentModel->getArgumentVoted($userId);
-        $camp = new CampModel();
-        $camps = $camp->getCampsByDebat($idDebat);
-        $view = new View();
-        $view->render("Arguments/list", ["camp1" => $camps[0], "camp2" => $camps[1], "idDebat" => $idDebat, "arguments" => $arguments, "votes" => $votes]);
-    }
-
     public static function create(int $idDebate): void
     {
         $campModel = new CampModel();

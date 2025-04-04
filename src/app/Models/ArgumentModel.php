@@ -131,12 +131,16 @@ class ArgumentModel
         $argument->setVoteNumber($argument->getVoteNumber()-1);
         return $statement->rowCount() === 1;
     }
-
     public function getArgumentVoted(int $userId): array
     {
         $statement = $this->pdo->prepare("SELECT id_arg FROM Voter WHERE id_utilisateur = :id");
         $statement->execute(["id" => $userId]);
         return $statement->fetchAll(PDO::FETCH_COLUMN);
+    }
+    public function hasMoreThan5Args(int $idUser, int $idDebate): bool{
+        $statement = $this->pdo->prepare("SELECT COUNT(*) FROM Argument NATURAL JOIN Camp WHERE Argument.id_utilisateur = :idUser AND id_debat = :idDebate");
+        $statement->execute(["idUser" => $idUser, "idDebate" => $idDebate]);
+        return $statement->fetchColumn() >= 5;
     }
     private function getVotesNumber(int $argumentId): int
     {

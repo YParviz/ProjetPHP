@@ -94,6 +94,7 @@ class DebatController
             $argumentModel = new ArgumentModel();
             $arguments = $argumentModel->getByDebat($id);
             $votes = $argumentModel->getArgumentVoted($userId);
+            $hasMoreThan5Args = $argumentModel->hasMoreThan5Args($userId, $id);
             $camp = new CampModel();
             $camps = $camp->getCampsByDebat($id);
 
@@ -103,7 +104,8 @@ class DebatController
                 "arguments" => $arguments,
                 "camp1" => $camps[0],
                 "camp2" => $camps[1],
-                "votes" => $votes
+                "votes" => $votes,
+                "hasMoreThan5Args" => $hasMoreThan5Args,
             ]);
 
         } catch (\Exception $e) {

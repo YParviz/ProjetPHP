@@ -6,9 +6,12 @@
 </head>
 <body>
     <br>
-    <a href="/debate/<?= $debat->getId()?>/poste">
-        <button class="buttonPost">Poster un nouvel argument</button>
-    </a>
+    <?php if ($hasMoreThan5Args): ?>
+        <button class="disabledButtonPost">Poster un nouvel argument</button>
+        <p class="aide">Vous avez déjà posté le nombre maximum d'argument pour ce débat</p>
+    <?php else: ?>
+        <button class="buttonPost" onclick="window.location.href='/debate/<?= $debat->getId() ?>/poste'">Poster un nouvel argument</button>
+    <?php endif; ?>
     <div class="arguments">
         <div class="camp1">
             <h2 class="center"><?= $camp1->getName() ?></h2>
